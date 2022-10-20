@@ -3,7 +3,8 @@ build-backend = "mesonpy"
 requires = [
 "meson",
 "meson-python",
-"setuptools"
+"setuptools",
+"numpy"
 ]
 #["numpy","scipy","meson","meson-python"]
 
@@ -11,7 +12,7 @@ requires = [
 name = "SILEXlight"
 authors = [
     {name = "Antoine Legay", email = "antoine.legay@lecnam.net"},
-     {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
+    {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
 ]
 description = "Basic SILEX library"
 requires-python = ">=3.8"
@@ -26,7 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Fortran",
 ]
-version = '1.1'
+version = '1.2.0b'
 
 # dynamic = ["version", "readme"]
 

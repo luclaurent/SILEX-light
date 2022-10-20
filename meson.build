@@ -1,16 +1,10 @@
 # Create normal meson project.
 project('SILEX-light', 
-        'fortran',
+        'c',
         default_options : ['buildtype=release'])
 
-# # Adding at project level causes many spurious -lgfortran flags.
-# add_languages('fortran', native: false)
-# ff = meson.get_compiler('fortran')
-# if ff.has_argument('-Wno-conversion')
-#   add_project_arguments('-Wno-conversion', language: 'fortran')
-# endif
-
-
+# add Fortran language
+add_languages('fortran')
 
 # Import python3 meson module which is used to find the Python dependencies.
 py3_mod = import('python')
@@ -18,30 +12,90 @@ py3_mod = import('python')
 py3 = py3_mod.find_installation('python',
     required: true,
 )
+py3_dep = py3.dependency()
+#
 message(py3.get_install_dir())
 message(py3.path())
 message(py3.get_path('purelib'))
-# # python_inst = py3.find_installation('python3')
-# # py3insta = py3_mod.find_installation('python3')   
-# # Create the Meson python3 dependency from the python3 module.
-py3_dep = dependency('python3', required : false)
 
-if py3_dep.found()
-#  Create the external C module using the python3 module helper function.
+# get includes of numpy
+incdir_numpy = run_command(py3,
+    ['-c', 'import os; os.chdir(".."); import numpy; print(numpy.get_include())'],
+    check : true
+    ).stdout().strip()
+
+# get includes of f2py
+incdir_f2py = run_command(py3,
+    ['-c', 'import os; os.chdir(".."); import numpy.f2py; print(numpy.f2py.get_include())'],
+    check : true
+).stdout().strip()
+
+# add numpy's and f2py's includes to Meson includes
+inc_np = include_directories(incdir_numpy,incdir_f2py)
+
+srcpath = 'src/SILEXlight'
+suf_module = 'module.c'
+suf_f2pywrapper = '-f2pywrappers.f'
+
+# build specific targets
+module_name = 'silex_lib_tet4_fortran'
+fortran_file = module_name + '.f'
+silex_lib_tet4_source = custom_target(module_name + suf_module,
+                            input : [ srcpath / fortran_file ], # .f so no F90 wrappers
+                            output : [ module_name + suf_module, module_name + suf_f2pywrapper ],
+                            command : [ py3, '-m', 'numpy.f2py', '@INPUT@',
+                            '-m', module_name, '--lower']
+                            )
+# generate extension
 py3.extension_module(
-    'silex_lib_tet4_fortran',
-    'src/SILEXlight/silex_lib_tet4_fortran.f',
-    dependencies : [py3_dep],
+    module_name,
+    srcpath / fortran_file,
+    silex_lib_tet4_source,
+    incdir_f2py / 'fortranobject.c',
+    dependencies : [ py3_dep ],
     install: true,
+    include_directories: inc_np,
     subdir: 'SILEXlight'
   )
+# #
+module_name = 'silex_lib_tri3_fortran'
+fortran_file = module_name + '.f'
+silex_lib_tri3_source = custom_target(module_name + suf_module,
+                            input : [ srcpath / fortran_file ], # .f so no F90 wrappers
+                            output : [ module_name + suf_module, module_name + suf_f2pywrapper ],
+                            command : [ py3, '-m', 'numpy.f2py', '@INPUT@',
+                            '-m', module_name, '--lower']
+                            )
+# generate extension
 py3.extension_module(
-    'silex_lib_tri3_fortran',
-    'src/SILEXlight/silex_lib_tri3_fortran.f',
-    dependencies : [py3_dep],
+    module_name,
+    srcpath / fortran_file,
+    silex_lib_tri3_source,
+    incdir_f2py / 'fortranobject.c',
+    dependencies : [ py3_dep ],
     install: true,
+    include_directories: inc_np,
     subdir: 'SILEXlight'
   )
+
+# #  Create the external C module using the python3 module helper function.
+# py3.extension_module(
+#     'silex_lib_tet4_fortran',
+#     srcpath / 'silex_lib_tet4_fortran.f',
+#     silex_lib_tet4_source,
+#     incdir_f2py / 'fortranobject.c',
+#     dependencies : [py3_dep],
+#     install: true,
+#     include_directories: inc_np,
+#     subdir: 'SILEXlight'
+#   )
+# py3.extension_module(
+#     'silex_lib_tri3_fortran',
+#     'src/SILEXlight/silex_lib_tri3_fortran.f',
+#     dependencies : [py3_dep],
+#     install: true,
+#     subdir: 'SILEXlight'
+#   )
 
 python_sources=[
     'src/SILEXlight/__init__.py',
@@ -75,6 +129,3 @@ pypathdir = meson.current_build_dir()
 
 #   # Check we can apply a version constraint
 #   # dependency('python3', version: '>=@0@'.format(py3_dep.version()))
-else
-  error('MESON_SKIP_TEST: Python3 libraries not found, skipping test.')
-endif
