@@ -1,0 +1,42 @@
+[build-system]
+build-backend = "mesonpy"
+requires = [
+"meson",
+"meson-python",
+"setuptools"
+]
+#["numpy","scipy","meson","meson-python"]
+
+[project]
+name = "SILEXlight"
+authors = [
+    {name = "Antoine Legay", email = "antoine.legay@lecnam.net"},
+     {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
+]
+description = "Basic SILEX library"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Fortran",
+]
+version = '1.1'
+
+# dynamic = ["version", "readme"]
+
+[project.urls]
+homepage = "https://antoinelegay.free.fr"
+repository = "https://github.com/luclaurent/SILEX-light"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+# [tool.setuptools.dynamic]
+# version = {attr = "SILEX-light.__version__"}
+# readme = {file = ["README.md"]}
