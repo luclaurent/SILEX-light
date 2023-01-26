@@ -35,7 +35,7 @@ jobs:
     - name: Install the package
       run: |
         export SETUPTOOLS_ENABLE_FEATURES="legacy-editable"
-        pip install -e -v .
+        pip install -v -e .
         # Show f2py compiler info for debug
         f2py -c --help-fcompiler        
     - name: Run tests
