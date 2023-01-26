@@ -141,9 +141,9 @@ def getTempDir():
     return os.path.join('build','temp','.',plat_specifier)
     
 
-# # Load README
-# with open("README.md", "r") as fh:
-#     long_description = fh.read()
+# Load README
+with open("README.md", "r") as fh:
+    long_description = fh.read()
     
 # Load version
 def version():
@@ -179,22 +179,11 @@ modules = [
 setup(
     name="SILEXlight",
     version=version(),
-    # author="X. YYY",
-    # author_email="xx.yy@zz.tt",
-    # # long_description=long_description,
-    # # long_description_content_type="text/markdown",
-    # url="https://github.com/XX/ZZZ",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     # Use find_packages() to automatically discover all packages and subpackages
     packages=setuptools.find_packages(),
     include_package_data=True,
     # build f90 module
-    # libraries = [('addmod', dict(sources=['pkgCustom/src/addmod.f90']))],
     ext_modules=modules
-    # classifiers=[
-    #     "Programming Language :: Python :: 3",
-    #     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-    #     "Operating System :: OS Independent"],
-    # # tested with python 3.5 may works with previous py3 version...
-    # python_requires='>=3.5',
-    # # pass modified install and develop class to support user options
 )
