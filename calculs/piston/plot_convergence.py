@@ -1,41 +1,41 @@
-import scipy
+import numpy
 import pylab
 
-h = scipy.array([5.0,
+h = numpy.array([5.0,
                  3.0
                  ])
 
-ComputationalTime = scipy.array([???,
+ComputationalTime = numpy.array([???,
                                  ???
                                  ])
 
-nbnodes= scipy.array([???,
+nbnodes= numpy.array([???,
                 ???
                 ])
 
-nbelem = scipy.array([???,
+nbelem = numpy.array([???,
                       ???
                       ])
 
-error = scipy.array([?????,
+error = numpy.array([?????,
                      ?????
                      ])
 
-MaxDisp=scipy.array([????,
+MaxDisp=numpy.array([????,
                      ????
 	             ])
 
-VMmaxi=scipy.array([???,
+VMmaxi=numpy.array([???,
                     ???
                     ])
 
-VMmaxiSmooth=scipy.array([???,
+VMmaxiSmooth=numpy.array([???,
                           ???
                           ])
 
 pylab.figure(1)
-pylab.plot(nbnodes,scipy.log10(MaxDisp))
-pylab.scatter(nbnodes,scipy.log10(MaxDisp))
+pylab.plot(nbnodes,numpy.log10(MaxDisp))
+pylab.scatter(nbnodes,numpy.log10(MaxDisp))
 pylab.xlabel('Nb nodes')
 pylab.ylabel('Disp. Maxi')
 pylab.grid('on')
@@ -51,16 +51,16 @@ pylab.scatter(nbnodes,VMmaxiSmooth)
 pylab.grid('on')
 
 pylab.figure(3)
-pylab.plot(scipy.log10(1.0/nbnodes),scipy.log10(error))
-pylab.scatter(scipy.log10(1.0/nbnodes),scipy.log10(error))
+pylab.plot(numpy.log10(1.0/nbnodes),numpy.log10(error))
+pylab.scatter(numpy.log10(1.0/nbnodes),numpy.log10(error))
 pylab.xlabel('Average elemental length (log10)')
 pylab.ylabel('Global error (log10)')
 pylab.title('Global error convergence')
 pylab.grid('on')
 
 pylab.figure(4)
-pylab.plot(scipy.log10(nbnodes),scipy.log10(ComputationalTime))
-pylab.scatter(scipy.log10(nbnodes),scipy.log10(ComputationalTime))
+pylab.plot(numpy.log10(nbnodes),numpy.log10(ComputationalTime))
+pylab.scatter(numpy.log10(nbnodes),numpy.log10(ComputationalTime))
 pylab.xlabel('Nb nodes (log10)')
 pylab.ylabel('Computational time (log10)')
 pylab.grid('on')

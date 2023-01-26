@@ -3,8 +3,8 @@ import numpy as np
 
 def test_det33_ligne_de_un():
     mat = np.random.randn(3,3)
-    mat[2,:] = 1
-    np.testing.assert_allclose(sx.det33_ligne_de_un(mat[0:2,:]), np.linalg.det(mat))
+    mat[0,:] = 1
+    np.testing.assert_allclose(sx.det33_ligne_de_un(mat[1:3,:]), np.linalg.det(mat))
     
 def test_stiffnessmatrix():
     assert True

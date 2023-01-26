@@ -1,12 +1,6 @@
 [build-system]
-build-backend = "mesonpy"
-requires = [
-"meson",
-"meson-python",
-"setuptools",
-"numpy"
-]
-#["numpy","scipy","meson","meson-python"]
+requires = ["setuptools","numpy","scipy","wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "SILEXlight"
@@ -16,9 +10,10 @@ authors = [
 ]
 description = "Basic SILEX library"
 requires-python = ">=3.8"
+license = {text = "LGPLv3"}
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: LGPLv3",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
@@ -27,16 +22,36 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Fortran",
 ]
-version = "1.2.0b"
+dependencies = [
+    "numpy", "scipy"
+]
+dynamic = ["version", "readme"]
 
-# dynamic = ["version", "readme"]
+[tool.setuptools.dynamic]
+readme = {file = ["README.md"]}
 
 [project.urls]
 homepage = "https://antoinelegay.free.fr"
 repository = "https://github.com/luclaurent/SILEX-light"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+[project.optional-dependencies]
+dev = [
+    "pylint ~=2.14.0",
+    "toml ~=0.10.2",
+    "yapf ~=0.32.0",
+]
+test = [
+    "pytest-cov ~=3.0.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-report html --cov-report term-missing --cov-fail-under 95"
+
+[tool.coverage.run]
+source = ["SILEXlight"]
+
+# [tool.setuptools]
+# package-dir = {"" = "src"}
 
 # [tool.setuptools.dynamic]
 # version = {attr = "SILEX-light.__version__"}
