@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "SILEXlight"
-authors = ["Antoine Legay <antoine.legay@lecnam.net>, Luc Laurent <luc.laurent@lecnam.net>"]
+authors = [{name="Antoine Legay, Luc Laurent",email = "antoine.legay@lecnam.net, luc.laurent@lecnam.net"},]
+# ]
 # authors = [
-#     {name = "Antoine Legay", email = "antoine.legay@lecnam.net"},
-#     {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
+#      {name = "Antoine Legay", email = "antoine.legay@lecnam.net"},
+#      {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
 # ]
 description = "Basic SILEX library"
 requires-python = ">=3.8"
