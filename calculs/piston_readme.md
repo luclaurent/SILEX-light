@@ -1,7 +1,7 @@
 Example of use: computation of a piston (first steps with SILEX)
 -----------------------------------------------
   
-<iframe width="640" height="480" style="border:1px solid #eeeeee;" src="https://3dviewer.net/embed.html#model=https://raw.githubusercontent.com/luclaurent/SILEX-light/main/calculs/piston/piston.step$camera=-8.66170,-118.06449,149.07646,20.83236,21.00000,57.47774,0.13753,0.53184,0.83560,45.00000$cameramode=orthographic$envsettings=fishermans_bastion,off$backgroundcolor=255,255,255,255$defaultcolor=200,200,200$edgesettings=off,0,0,0,1"></iframe>
+The 3D model can be open in your browser using this [link](https://3dviewer.net#model=https://raw.githubusercontent.com/luclaurent/SILEX-light/main/calculs/piston/piston.step)
 
 We want to compute a 3D structure 3D meshed with 4-node tetrahedral elements.  
   
