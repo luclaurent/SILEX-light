@@ -13,7 +13,7 @@ Le modèle 3D du piston peut être consulté via [3Dviewer](https://3dviewer.net
 
 *   Un plan A3 d'implantation de la pièce est fourni à l'échelle 1: [PLAN A3](../misc/Plan_fourche_A3.pdf)   
 *   Un plan A4 en 3 vues de la noix de fourche est aussi donné: [PLAN 3D](../misc/fourch.jpg)  
-*   La CAO de la pièce est donnée au format STEP (fichier) [`fork.step](landing_gear_fork/fork.step)). 
+*   La CAO de la pièce est donnée au format STEP (fichier) [`fork.step`](landing_gear_fork/fork.step)). 
 *   On demande de faire l'étude avec les conditions suivantes:
 
 
