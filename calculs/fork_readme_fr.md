@@ -19,7 +19,7 @@ Le modèle 3D du piston peut être consulté via [3Dviewer](https://3dviewer.net
 
 
     *   la base de la noix de fourche est en appui plan et en liaisons pivot avec les 4 vis d'axe `y`: on peut simplifier en encastrant la face inférieure 
-    *   les branches du compas exercent les efforts suivants sur les "oreilles dans le repère (X,Y,Z) de la pièce:   
+    *   les branches du compas exercent les efforts suivants sur les "oreilles" dans le repère (X,Y,Z) de la pièce:   
          *   [1000 N, -2000 N , 0] sur une,
          *   [-5000 N, -2000 N , 0] sur l'autre.  
     *   le matériau est de l'aluminium (AU-4G) de module d'Young 75000MPa, de coefficient de Poisson 0,27 et de limite élastique 240MPa.  
