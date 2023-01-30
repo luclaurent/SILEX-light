@@ -1,5 +1,6 @@
 
 # Calcul d'une fourche de train d'atterrissage 
+*English version available [here](fork_readme.md)*
 
 Le modèle 3D du piston peut être consulté via [3Dviewer](https://3dviewer.net#model=https://raw.githubusercontent.com/luclaurent/SILEX-light/main/calculs/landing_gear_fork/fork.step)
   
@@ -31,22 +32,27 @@ Le modèle 3D du piston peut être consulté via [3Dviewer](https://3dviewer.net
     *   Définir le volume:   `geometry/physical group/add/volume` sélectionner la boule jaune, puis taper `e`
     *   Définir les surfaces utiles: pour chaque surface utile, faire:  `geometry/physical group/add/Surface` sélectionner la surface, puis taper `e`  
     *   Définir la taille de éléments: `Mesh/Define/Characteristic length /Surface`  
- *   Perform all the necessary tasks o have a mesh ready for the Python Main file.  
-*   Copy the file [`Main-Piston.py`](piston/Main-Piston.py) (or [`Main-Piston.ipynb`](piston/Main-Piston.ipynb) into `Main-Fork.py` (or `Main-Fork.ipynb`), modify this file in order to perform the computation.  
-*   Perform a convergence study  
-*   Analyze the results.  
+        * Entrer la valeur 5 dans la fenêtre de dialogue, cela correspond à la taille des éléments en mm (les longueurs sont en mm dans le fichier CAO).
+        * Sélectionner dans la fenêtre graphique l'ensemble des points du modèle: appui long sur `Ctrl` puis clic gauche de la souris.
+        * Tous les points doivent être rouges, valider en tapant la touche e. 
+*   Copier le fichier [`Main-Piston.py`](piston/Main-Piston.py) (ou [`Main-Piston.ipynb`](piston/Main-Piston.ipynb) en  `Main-Fork.py` (ou `Main-Fork.ipynb`), modifier ce fichier puis lancer le calcul.
+*   Effectuer une analyse rapide de convergence des résultats. 
 
-## Report  
-*   Give briefly the formulation of the 4-node tetrahedral element.  
-*   Explain the programs, specially the parts that you have completed.  
-*  Analyze the 2 computations `piston` and `fork`  
-*   Comment the curves coming from the convergence study
-*   Format of the report is free: paper or pdf, by hand or with the help of a word-processing.  
+
+
+## Compte-rendu  
+*   Rappeler la formulation du tétraèdre à 4 nœuds. 
+*    Expliquer les parties completées des programmes
+*    Expliquer la programmation de l'assemblage des matrices élémentaires dans la matrice globale stockée en sparse
+*    A l'aide d'un croquis, expliquer les différentes tâches réalisées en python et en fortran par le programme.
+*    Analyser les deux calculs "piston" et "fourche"
+*    Commenter les courbes de convergence
+*    Format du compte-rendu libre: papier ou pdf, à la main ou non. 
  
-## Results "Landing gear fork": displacements
+## Resultats "Fourche": déplacements
 
 <img src="../misc/resultats-fourche-disp.png" alt="resultats-fourche-disp" width="200"/>
 
-## Results "Landing gear fork": smooth Von Mises stress
+## Resultats "Fourche": contraintes de Von Mises lissées
 
 <img src="../misc/resultats-fourche-VMlissee.png" alt="resultats-fourche-VMlissee" width="200"/>
