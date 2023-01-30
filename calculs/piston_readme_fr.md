@@ -34,13 +34,20 @@ Le fichier [`piston-tet4.geo`](piston/piston-tet4.geo) est écrit au format gmsh
    *   Les `physical groups` ffectent des noms aux éléments et aux nœuds pour pouvoir ensuite leur appliquer des conditions: `Geometry`; `physical group`; `add`; `surface`: sélectionner les 2 surfaces suivantes: puis taper `e`.  
       
         *   Surface S1:  
-    <img src="../misc/image-surf-1.png" alt="image-surf-1.png" width="200"/>
+   
+             <img src="../misc/image-surf-1.png" alt="image-surf-1.png" width="200"/>
+
         *   Faire de même avec pour la surface S2:  
-    <img src="../misc/image-surf-2.png" alt="image-surf-2.png" width="200"/>
+
+             <img src="../misc/image-surf-2.png" alt="image-surf-2.png" width="200"/>
+
         *   Puis pour la surface S3:  
-    <img src="../misc/image-surf-3.png" alt="image-surf-3.png" width="200"/>
+
+             <img src="../misc/image-surf-3.png" alt="image-surf-3.png" width="200"/>
+
         *   Enfin pour la surface S4 (cliquer sur le 1/4 de sphère et sur le 1/4 d'anneau "horizontal"):
-    <img src="../misc/image-surf-4.png" alt="image-surf-4.png" width="200"/>
+
+             <img src="../misc/image-surf-4.png" alt="image-surf-4.png" width="200"/>
     
     *   Définir le volume: cliquer sur  `geometry/physical group/add/volume` et sélectionner la boule jaune, puis taper `e`.
 

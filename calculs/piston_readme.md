@@ -33,13 +33,20 @@ The file [`piston-tet4.geo`](piston/piston-tet4.geo) is a `gmsh` text file: it l
    *   The `physical groups` can be used to give names (numbers) to elements and nodes on which we want to apply conditions: `Geometry`; `physical group`; `add`; `surface`: select the 2 following: then press the `e` key  
       
         *   Surface S1:  
-    <img src="../misc/image-surf-1.png" alt="image-surf-1.png" width="200"/>
+   
+            <img src="../misc/image-surf-1.png" alt="image-surf-1.png" width="200"/>
+
         *   Do the same for the surface S2:  
-    <img src="../misc/image-surf-2.png" alt="image-surf-2.png" width="200"/>
+   
+            <img src="../misc/image-surf-2.png" alt="image-surf-2.png" width="200"/>
+
         *   Do the same for the surface S3:  
-    <img src="../misc/image-surf-3.png" alt="image-surf-3.png" width="200"/>
+   
+            <img src="../misc/image-surf-3.png" alt="image-surf-3.png" width="200"/>
+
         *   Then, do the same for surface S4 (select the 1/4 of the sphere and the 1/4 of the "horizontal" ring):  
-    <img src="../misc/image-surf-4.png" alt="image-surf-4.png" width="200"/>
+   
+            <img src="../misc/image-surf-4.png" alt="image-surf-4.png" width="200"/>
     
     *   Define the volume: click on `geometry/physical group/add/volume` and then select the small yellow ball, then confirm by pressing the `e` key.
 

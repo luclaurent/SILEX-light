@@ -47,7 +47,6 @@ def showMessageExtension(sourcefiles = [],
         txtMessage = txtMessage + ', '.join(linkArgs)
     logger.debug(txtMessage)
     txtMessage = ' >> compilation arguments: '
-    print(compileArgs)
     if not compileArgs:
         txtMessage = txtMessage + 'None'
     else:
