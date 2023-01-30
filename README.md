@@ -22,7 +22,8 @@ SILEX is a finite element code written in Python language, eventually with a For
 *   The following course document available on-line ([here](http://antoinelegay.free.fr/Cours-programmation-english.pdf)) gives a programming introduction.
 ## Usage
 
-A complete example of the use of SILEX on a piston is available [here](calculs/piston_readme.md) in english ([french version](calculs/piston_readme_fr.md))
+* A complete example of the use of SILEX on a piston is available [here](calculs/piston_readme.md) in english ([french version](calculs/piston_readme_fr.md))
+* A example pratical work for education is provided on a landing gear fork [here](calculs/fork_readme.md) in english ([french version](calculs/fork_readme_fr.md))
 
 ## Installation
 Classical installation by executing

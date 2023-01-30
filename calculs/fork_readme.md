@@ -1,5 +1,6 @@
 
 # Landing gear fork
+*French version available [here](fork_readme_fr.md)*
 
 The 3D model can be open in your browser using this [link](https://3dviewer.net#model=https://raw.githubusercontent.com/luclaurent/SILEX-light/main/calculs/landing_gear_fork/fork.step)
   
