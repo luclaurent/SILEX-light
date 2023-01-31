@@ -1,6 +1,6 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 
-name: CI-mac-os-pypi
+name: CI-mac-os
 
 
 on:
@@ -24,13 +24,13 @@ jobs:
       version: 11
     strategy:
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']        
+        python-version: ['3.8'] #['3.8', '3.9', '3.10', '3.11']        
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install gfortran
@@ -64,7 +64,8 @@ jobs:
         python -m pip install --upgrade pip pytest pytest-cov pytest-flakes setuptools
     - name: Install the package
       run: |
-        pip install -v SILEXlight
+        export SETUPTOOLS_ENABLE_FEATURES="legacy-editable"
+        pip install -v -e .
         # Show f2py compiler info for debug
         f2py -c --help-fcompiler        
     - name: Run tests
