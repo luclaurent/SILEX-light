@@ -16,7 +16,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       # gcc/gfrotran version
       version: 11
@@ -33,16 +33,38 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install gfortran
       run: |
-          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-          sudo apt-get update
-          sudo apt-get install -y gcc-${version} gfortran-${version}
-          sudo update-alternatives \
-            --install /usr/bin/gcc gcc /usr/bin/gcc-${version} 100 \
-            --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-${version} \
-            --slave /usr/bin/gcov gcov /usr/bin/gcov-${version}
-          export FC="gfortran"
-          export CC="gcc"
-          export CXX="g++"
+           case $version in
+              12)
+                choco install mingw --version 12.2.0 --force
+                ;;
+              11)
+                choco install mingw --version 11.2.0 --force
+                ;;
+              10)
+                choco install mingw --version 10.3.0 --force
+                ;;
+              9)
+                choco install mingw --version 9.4.0 --force
+                ;;
+              8)
+                choco install mingw --version 8.5.0 --force
+                ;;
+              *)
+                echo "Unsupported version: $version (choose 8-12)"
+                exit 1
+                ;;
+            esac
+
+            export FC="gfortran"
+            export CC="gcc"
+            export CXX="g++"
+
+            # missing DLL can cause successfully compiled executables to fail at runtime
+            FCDIR=/c/ProgramData/Chocolatey/bin
+            LNDIR=/c/ProgramData/Chocolatey/lib/mingw/tools/install/mingw64/bin
+            if [ -d "$FCDIR" ] && [ -f "$LNDIR/libgfortran-5.dll" ] && [ ! -f "$FCDIR/libgfortran-5.dll" ]; then
+                ln -s "$LNDIR/libgfortran-5.dll" "$FCDIR/libgfortran-5.dll"
+            fi
     - name: Check gfortran's version
       run: gfortran --version
     - name: Install dependencies
@@ -50,8 +72,7 @@ jobs:
         python -m pip install --upgrade pip pytest pytest-cov pytest-flakes setuptools
     - name: Install the package
       run: |
-        export SETUPTOOLS_ENABLE_FEATURES="legacy-editable"
-        pip install -v -e .
+        pip install -v SILEXlight
         # Show f2py compiler info for debug
         f2py -c --help-fcompiler        
     - name: Run tests
