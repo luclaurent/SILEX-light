@@ -18,6 +18,7 @@ on:
 jobs:
   test:
     runs-on: macos-latest
+    timeout-minutes: 30
     env:
       # gcc/gfrotran version
       version: 11
