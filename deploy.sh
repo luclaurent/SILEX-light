@@ -10,7 +10,8 @@ function wheel()
     # the wheel.
     # Clean-up previous version
     rm  $WHEEL_DIR/SILEXlight*.whl
-    pip3 wheel . -w dist
+    rm  $WHEEL_DIR/SILEXlight*.tar.gz
+    python -m build --outdir dist
     # Setup venv
     TEMP_DIR=$(mktemp -d)
     python3 -m venv $TEMP_DIR
@@ -42,10 +43,10 @@ do
     -i|--install) pip install --user twine
     ;;
     -t|--test)
-    wheel && twine upload --verbose -r testpypi $WHEEL_DIR/SILEXlight*.whl
+    wheel && twine upload --verbose -r testpypi $WHEEL_DIR/SILEXlight*.whl $WHEEL_DIR/SILEXlight*.tar.gz
     ;;
     -d|--deploy)
-    wheel && twine upload --verbose $WHEEL_DIR/SILEXlight*.whl
+    wheel && twine upload --verbose $WHEEL_DIR/SILEXlight*.whl $WHEEL_DIR/SILEXlight*.tar.gz
     ;;
     esac
 done
