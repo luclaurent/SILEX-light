@@ -19,6 +19,24 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Provide gfortran (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # https://github.com/actions/virtual-environments/issues/2524
+          # https://github.com/cbg-ethz/dce/blob/master/.github/workflows/pkgdown.yaml
+          sudo ln -s /usr/local/bin/gfortran-11 /usr/local/bin/gfortran
+          sudo mkdir /usr/local/gfortran
+          sudo ln -s /usr/local/Cellar/gcc@11/*/lib/gcc/11 /usr/local/gfortran/lib
+          gfortran --version
+      - name: Provide gfortran (Windows)
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+      - name: Tell distutils to use mingw (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "[build]`ncompiler=mingw32" | Out-File -Encoding ASCII ~/pydistutils.cfg
+
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.12.0
         env:
@@ -28,7 +46,7 @@ jobs:
         with:
           name: ${{ matrix.python }}-${{ matrix.buildplat }} 
           path: ./wheelhouse/*.whl
-          
+
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-latest
