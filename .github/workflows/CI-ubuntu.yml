@@ -16,6 +16,7 @@ on:
 
 jobs:
   test:
+    name: Test with ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
