@@ -56,6 +56,18 @@ addopts = "--cov --cov-report html --cov-report term-missing --cov-fail-under 1"
 [tool.coverage.run]
 source = ["SILEXlight"]
 
+[tool.cibuildwheel]
+test-requires = "pytest"
+test-command = "python -m pytest --pyargs SILEXlight.tests"
+manylinux-x86_64-image="manylinux2014"
+
+[tool.cibuildwheel.linux]
+repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
+
+[[tool.cibuildwheel.overrides]]
+select = "cp3{8,9,10,11}-*"
+
+
 
 # [tool.setuptools]
 # package-dir = {"" = "src"}
