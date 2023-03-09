@@ -12,7 +12,7 @@ maintainers = [
      {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
 ]
 description = "Basic SILEX library"
-requires-python = ">=3.8"
+requires-python = ">=3.7"
 license = {text = "LGPLv3"}
 classifiers = [
     "Development Status :: 3 - Alpha",
