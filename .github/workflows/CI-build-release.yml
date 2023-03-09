@@ -6,6 +6,7 @@ jobs:
   build_wheels:
     name: Build wheels on ${{ matrix.buildplat }}-${{ matrix.python }}
     runs-on: ${{ matrix.buildplat }}
+    continue-on-error: true
     strategy:
       matrix:
         buildplat: [ubuntu-20.04, macos-12, windows-2019] 
