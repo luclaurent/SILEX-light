@@ -1,4 +1,4 @@
-name: Build
+name: Build wheels and sdist
 
 on: [push, pull_request]
 
