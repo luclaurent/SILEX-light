@@ -9,7 +9,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        buildplat: [ubuntu-20.04, macos-12, windows-2019] 
+        buildplat: [ubuntu-22.04, macos-12, windows-2019] 
         python: [cp38, cp39, cp310, cp311]
 
     steps:
