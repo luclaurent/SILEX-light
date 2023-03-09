@@ -11,7 +11,7 @@ function wheel()
     # Clean-up previous version
     rm  $WHEEL_DIR/SILEXlight*.whl
     rm  $WHEEL_DIR/SILEXlight*.tar.gz
-    python -m build --outdir dist
+    python -m build --outdir dist   
     # Setup venv
     TEMP_DIR=$(mktemp -d)
     python3 -m venv $TEMP_DIR
@@ -40,6 +40,8 @@ function wheel()
 for i in "$@"
 do
     case "$i" in
+    -b|--base) pip install build virtualenv ensurepip
+    ;;
     -i|--install) pip install --user twine
     ;;
     -t|--test)
