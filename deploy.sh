@@ -39,13 +39,7 @@ function wheel()
     # Build and test wheel in an venv to check if all required files are present in
     # the wheel.
     # Clean-up previous version
-<<<<<<< HEAD
-    rm  $WHEEL_DIR/SILEXlight*.whl
-    rm  $WHEEL_DIR/SILEXlight*.tar.gz
-    python -m build --outdir dist   
-=======
     python -m build --outdir ${PATHWHEEL}
->>>>>>> f7933e97129dae7de1be9b4af5b8dd199296d9c4
     # Setup venv
     TEMP_DIR=$(mktemp -d)
     python -m venv $TEMP_DIR
@@ -157,11 +151,6 @@ function build()
 for i in "$@"
 do
     case "$i" in
-<<<<<<< HEAD
-    -b|--base) pip install build virtualenv ensurepip
-    ;;
-    -i|--install) pip install --user twine
-=======
     -i|--install) pip install --user twine build virtualenv
     ;;
     -l|--list)
@@ -177,7 +166,6 @@ do
     -u|--nobuild)
     checkfiles
     twine upload --skip-existing --verbose $(listfiles)
->>>>>>> f7933e97129dae7de1be9b4af5b8dd199296d9c4
     ;;
     -t|--test)
     build && twine upload --skip-existing --verbose -r testpypi $(listfiles)
