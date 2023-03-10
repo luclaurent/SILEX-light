@@ -67,7 +67,7 @@ jobs:
   release:
     name: Release wheels and sdist
     # Edit here if compiling multiple papers
-    needs: [build_wheels, sdist]
+    needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
