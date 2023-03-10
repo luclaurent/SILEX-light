@@ -44,6 +44,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.12.0
         env:
           CIBW_BUILD: ${{ matrix.python }}-* 
+          CIBW_SKIP: "*-win32 *i686"
 
       - uses: actions/upload-artifact@v3
         with:
