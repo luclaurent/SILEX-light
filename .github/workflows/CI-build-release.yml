@@ -9,8 +9,8 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        buildplat: [ubuntu-22.04, macos-12, windows-2019] 
-        python: [cp38, cp39, cp310, cp311]
+        buildplat: [ubuntu-22.04] #, macos-12, windows-2019] 
+        python: [cp38] #, cp39, cp310, cp311]
 
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: "3.x"
       - name: Provide OpenBLAS
-        if: runner.os == 'Ubuntu'
+        if: runner.os == 'Linux'
         run: sudo apt-get install libopenblas-dev
       - name: Provide gfortran (macOS)
         if: runner.os == 'macOS'
