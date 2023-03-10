@@ -75,7 +75,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: build
-      - - name: Release
+      - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
