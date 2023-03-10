@@ -75,14 +75,17 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           path: build
+      - name: move
+        run: |
+             mkdir -p github_deploy && mv build/*/* github_deploy && ls -l github_deploy
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           tag_name: SILEXlight-${{ github.event.release.tag_name }}
-          name: SILEXlight releave ${{ github.event.release.tag_name }}
+          name: SILEXlight release ${{ github.event.release.tag_name }}
           prerelease: false
-          files: build/*
+          files: github_deploy/*
 
   # upload_pypi:
   #   needs: [build_wheels, build_sdist]
