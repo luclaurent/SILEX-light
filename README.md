@@ -1,6 +1,6 @@
 # SILEXlight
 
-[![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![pypi release](https://img.shields.io/pypi/v/SILEXlight.svg)](https://test.pypi.org/project/SILEXlight/) ![CI-Ubuntu](https://github.com/luclaurent/silex-light/workflows/CI-Ubuntu/badge.svg) ![CI-MacOS](https://github.com/luclaurent/silex-light/workflows/CI-mac-os/badge.svg)
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![pypi release](https://img.shields.io/pypi/v/SILEXlight.svg)](https://test.pypi.org/project/SILEXlight/) [![CI-ubuntu](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-ubuntu.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-ubuntu.yml) [![CI-mac-os](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-macos.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-macos.yml) [![Wheels and sdist](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml)
 
 SILEX is a finite element code written in Python language, eventually with a Fortran part in order to speed up the computations.
     

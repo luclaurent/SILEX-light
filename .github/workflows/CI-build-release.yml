@@ -62,7 +62,27 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
+          name: SDist 
           path: dist/*.tar.gz
+  release:
+    name: Release wheels and sdist
+    # Edit here if compiling multiple papers
+    needs: [build_wheels, sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          path: build
+      - - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: SILEXlight-${{ github.event.release.tag_name }}
+          name: SILEXlight releave ${{ github.event.release.tag_name }}
+          prerelease: false
+          files: build/*
 
   # upload_pypi:
   #   needs: [build_wheels, build_sdist]
