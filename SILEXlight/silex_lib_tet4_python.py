@@ -193,6 +193,83 @@ def stiffnessmatrix(nodes, elements, material):
 
 #############################################################
 
+def massmatrix(nodes,elements,rho):
+
+    nelem   = elements.shape[0]
+    Ik      = numpy.zeros(12*12*nelem,dtype=int)
+    Jk      = numpy.zeros(12*12*nelem,dtype=int)
+    Vk      = numpy.zeros(12*12*nelem,dtype=float)
+    dofelem = numpy.zeros(12,dtype=int)
+    dofx    = numpy.zeros(4,dtype=int)
+    dofy    = numpy.zeros(4,dtype=int)
+    dofz    = numpy.zeros(4,dtype=int)
+    idnodes = numpy.zeros(4,dtype=int)
+    RG      = numpy.zeros(5,dtype=float)
+    SG      = numpy.zeros(5,dtype=float)
+    TG      = numpy.zeros(5,dtype=float)
+    WG      = numpy.zeros(5,dtype=float)
+    NN      = numpy.zeros(4,dtype=float)
+    A34     = numpy.zeros((3,4),dtype=float)
+    PHI     = numpy.zeros((3,12),dtype=float)
+
+# Define Gauss points in reference tetrahedral
+    npgt=5
+    RG[0]=1.0/4.0; SG[0]=1.0/4.0; TG[0]=1.0/4.0; WG[0]=-4.0/(5.0*6.0)
+    RG[1]=1.0/2.0; SG[1]=1.0/6.0; TG[1]=1.0/6.0; WG[1]=9.0/(20.0*6.0)
+    RG[2]=1.0/6.0; SG[2]=1.0/2.0; TG[2]=1.0/6.0; WG[2]=9.0/(20.0*6.0)
+    RG[3]=1.0/6.0; SG[3]=1.0/6.0; TG[3]=1.0/2.0; WG[3]=9.0/(20.0*6.0)
+    RG[4]=1.0/6.0; SG[4]=1.0/6.0; TG[4]=1.0/6.0; WG[4]=9.0/(20.0*6.0)
+
+    p=0
+    for e in range(nelem):
+        idnodes[:] = elements[e,:]-1
+        
+        X=nodes[idnodes,0]
+        Y=nodes[idnodes,1]
+        Z=nodes[idnodes,2]
+        dofx[:]     = (idnodes)*3
+        dofy[:]     = (idnodes)*3+1
+        dofz[:]     = (idnodes)*3+2
+        dofelem[0]  = dofx[0] 
+        dofelem[1]  = dofy[0] 
+        dofelem[2]  = dofz[0] 
+        dofelem[3]  = dofx[1] 
+        dofelem[4]  = dofy[1]
+        dofelem[5]  = dofz[1] 
+        dofelem[6]  = dofx[2] 
+        dofelem[7]  = dofy[2] 
+        dofelem[8]  = dofz[2]
+        dofelem[9]  = dofx[3] 
+        dofelem[10] = dofy[3] 
+        dofelem[11] = dofz[3] 
+
+        A34[0,:]    = X
+        A34[1,:]    = Y
+        A34[2,:]    = Z
+        det_of_sys  = det44_ligne_de_un(A34)
+        Vol         = abs(det_of_sys/6)
+
+        me          = numpy.zeros((12,12),dtype=float)
+
+        # loop over Gauss Points
+        for g in range(npgt):
+            NN[0]=RG[g];NN[1]=SG[g];NN[2]=TG[g];NN[3]=1-RG[g]-SG[g]-TG[g]
+            
+            PHI[0,0]=NN[0];PHI[0,3]=NN[1];PHI[0,6]=NN[2];PHI[0,9]=NN[3]
+            PHI[1,1]=NN[0];PHI[1,4]=NN[1];PHI[1,7]=NN[2];PHI[1,10]=NN[3]
+            PHI[2,2]=NN[0];PHI[2,5]=NN[1];PHI[2,8]=NN[2];PHI[2,11]=NN[3]
+
+            me = me + numpy.dot(PHI.T,PHI)*rho*WG[g]*Vol*6.0
+
+        for i in range(12):
+            Ik[p:(p+12)]=dofelem[i]
+            Jk[p:(p+12)]=dofelem[:]
+            Vk[p:(p+12)]=me[i,:]
+            p=p+12
+
+    return Ik,Jk,Vk
+
+############################################################
 
 def forceonsurface(nodes, elements, press, direction):
     nbnodes = nodes.shape[0]
