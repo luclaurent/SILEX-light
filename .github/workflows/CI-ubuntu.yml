@@ -20,17 +20,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # gcc/gfrotran version
-      version: 11
+      # gcc/gfortran version
+      version: 12
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']        
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']        
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install gfortran
@@ -47,13 +47,9 @@ jobs:
           export CXX="g++"
     - name: Check gfortran's version
       run: gfortran --version
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip pytest pytest-cov pytest-flakes setuptools
     - name: Install the package
       run: |
-        export SETUPTOOLS_ENABLE_FEATURES="legacy-editable"
-        pip install -v -e .
+        pip install -v .
         # Show f2py compiler info for debug
         f2py -c --help-fcompiler        
     - name: Run tests
