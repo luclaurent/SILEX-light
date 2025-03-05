@@ -69,12 +69,12 @@ ignore-vcs = false
 [tool.hatch.metadata.hooks.meson]
 
 [tool.pytest.ini_options]
-addopts = "--cov --cov-report html --cov-report term-missing --cov-fail-under 1"
+addopts = "-v --cov-report term --cov-report html:htmlcov --cov-report xml --cov-fail-under 1"
 
 
 [tool.coverage.run]
 branch = true
-command_line = "-m unittest discover -s tests/"
+command_line = "-m unittest discover -s SILEXlight/tests"
 
 [tool.coverage.html]
 directory = "coverage_html_report"
