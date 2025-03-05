@@ -37,9 +37,9 @@ jobs:
     - name: Install gfortran
       run: |
           brew install gcc@${version}
-          ln -s $(which gfortran-${version}} /usr/local/bin/gfortran
-          ln -s $(which gcc-${version}} /usr/local/bin/gcc
-          ln -s $(which g++-${version}} /usr/local/bin/g++
+          ln -s $(which gfortran-${version}) /usr/local/bin/gfortran
+          ln -s $(which gcc-${version}) /usr/local/bin/gcc
+          ln -s $(which g++-${version}) /usr/local/bin/g++
 
           # # link lib dir for previous GCC versions to avoid missing .dylib issues
           # for (( i=12; i>4; i-- ))
