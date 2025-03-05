@@ -61,6 +61,7 @@ jobs:
     - name: Check gfortran's version
       run: |
             echo $PATH
+            which gfortran-14
             gfortran-14 --version
             ls -la /usr/local/bin/
             which gfortran            
