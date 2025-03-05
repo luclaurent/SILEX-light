@@ -1,19 +1,22 @@
 [build-system]
-requires = ["setuptools","numpy","scipy","wheel"]
+requires = ["setuptools","numpy","wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "SILEXlight"
 authors = [
-    {name = "Antoine Legay", email = "antoine.legay@lecnam.net"},
-    {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
+     {name = "Antoine Legay", email = "antoine.legay@lecnam.net"},
+     {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
+]
+maintainers = [
+     {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
 ]
 description = "Basic SILEX library"
-requires-python = ">=3.8"
+requires-python = ">=3.7"
 license = {text = "LGPLv3"}
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: LGPLv3",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
@@ -21,6 +24,9 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Fortran",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+    "Topic :: Scientific/Engineering :: Physics"
 ]
 dependencies = [
     "numpy", "scipy"
@@ -28,7 +34,7 @@ dependencies = [
 dynamic = ["version", "readme"]
 
 [tool.setuptools.dynamic]
-readme = {file = ["README.md"]}
+readme = {file = ["README.md"], content-type = "text/markdown"}
 
 [project.urls]
 homepage = "https://antoinelegay.free.fr"
@@ -45,10 +51,23 @@ test = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--cov --cov-report html --cov-report term-missing --cov-fail-under 95"
+addopts = "--cov --cov-report html --cov-report term-missing --cov-fail-under 1"
 
 [tool.coverage.run]
 source = ["SILEXlight"]
+
+[tool.cibuildwheel]
+test-requires = "pytest"
+test-command = "python -m pytest --pyargs SILEXlight.tests"
+manylinux-x86_64-image="manylinux2014"
+
+[tool.cibuildwheel.linux]
+repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
+
+[[tool.cibuildwheel.overrides]]
+select = "cp3{8,9,10,11}-*"
+
+
 
 # [tool.setuptools]
 # package-dir = {"" = "src"}

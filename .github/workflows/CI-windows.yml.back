@@ -1,7 +1,6 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 
-name: CI-mac-os
-
+name: CI-windows
 
 on:
   push:
@@ -17,8 +16,7 @@ on:
 
 jobs:
   test:
-    name: Test with ${{ matrix.python-version }}
-    runs-on: macos-latest
+    runs-on: windows-latest
     timeout-minutes: 30
     env:
       # gcc/gfrotran version
@@ -36,28 +34,38 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install gfortran
       run: |
-          brew install gcc@${version}
-          ln -fs /usr/local/bin/gfortran-${version} /usr/local/bin/gfortran
-          ln -fs /usr/local/bin/gcc-${version} /usr/local/bin/gcc
-          ln -fs /usr/local/bin/g++-${version} /usr/local/bin/g++
-
-          # link lib dir for previous GCC versions to avoid missing .dylib issues
-          for (( i=12; i>4; i-- ))
-          do
-              gcc_lib_path="/usr/local/opt/gcc/lib/gcc/$i"
-              if [ -d $gcc_lib_path ]; then
-                echo "found $gcc_lib_path"
-                for (( j=$i; j>4; j-- ))
-                do
-                  ln -fs /usr/local/opt/gcc/lib/gcc/$i /usr/local/opt/gcc/lib/gcc/$j
-                done
-                break
-              fi
-            done
+           case $version in
+              12)
+                choco install mingw --version 12.2.0 --force
+                ;;
+              11)
+                choco install mingw --version 11.2.0 --force
+                ;;
+              10)
+                choco install mingw --version 10.3.0 --force
+                ;;
+              9)
+                choco install mingw --version 9.4.0 --force
+                ;;
+              8)
+                choco install mingw --version 8.5.0 --force
+                ;;
+              *)
+                echo "Unsupported version: $version (choose 8-12)"
+                exit 1
+                ;;
+            esac
 
             export FC="gfortran"
             export CC="gcc"
             export CXX="g++"
+
+            # missing DLL can cause successfully compiled executables to fail at runtime
+            FCDIR=/c/ProgramData/Chocolatey/bin
+            LNDIR=/c/ProgramData/Chocolatey/lib/mingw/tools/install/mingw64/bin
+            if [ -d "$FCDIR" ] && [ -f "$LNDIR/libgfortran-5.dll" ] && [ ! -f "$FCDIR/libgfortran-5.dll" ]; then
+                ln -s "$LNDIR/libgfortran-5.dll" "$FCDIR/libgfortran-5.dll"
+            fi
     - name: Check gfortran's version
       run: gfortran --version
     - name: Install dependencies

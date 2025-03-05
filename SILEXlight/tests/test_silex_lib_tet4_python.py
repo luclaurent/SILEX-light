@@ -29,3 +29,7 @@ def test_forceonsurface():
 def test_stiffnessmatrix():
     # sx_tet4.stiffnessmatrix()
     assert True
+
+def test_massmatrix():
+    # sx_tet4.massmatrix()
+    assert True

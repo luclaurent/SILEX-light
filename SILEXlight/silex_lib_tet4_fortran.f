@@ -261,7 +261,112 @@ c                          python indexing
       return
       end
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+! CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+      
+      SUBROUTINE MassMatrix(nbnodes, 
+     &                      nodes,
+     &                      nelem,
+     &                      elements,
+     &                      rho,
+     &                      Ik,
+     &                      Jk,
+     &                      Vk)
 
+      IMPLICIT NONE
+
+      INTEGER,INTENT(IN) :: nelem,nbnodes
+      INTEGER,INTENT(IN) :: elements(nelem,4)
+      DOUBLE PRECISION,INTENT(IN) :: nodes(nbnodes,3),rho
+      !!
+      INTEGER,INTENT(OUT) :: Ik(12*12*nelem),Jk(12*12*nelem)
+      DOUBLE PRECISION,INTENT(OUT) :: Vk(12*12*nelem)
+      !!
+      INTEGER :: npgt,p,e,i,j,g
+      DOUBLE PRECISION :: det_of_sys, det44_ligne_de_un
+      INTEGER :: dofelem(12),dofx(4),dofy(4),dofz(4),idnodes(4)
+      DOUBLE PRECISION :: RG(5),SG(5),TG(5),WG(5),NN(4)
+      DOUBLE PRECISION :: A34(3,4),PHI(3,12),me(12,12)
+      DOUBLE PRECISION :: Vol
+      DOUBLE PRECISION :: X(4),Y(4),Z(4)
+
+
+    ! Define Gauss points in reference tetrahedral
+      npgt=5
+      RG=(/1.0/4.0,1.0/2.0,1.0/6.0,1.0/6.0,1.0/6.0/)
+      SG=(/1.0/4.0,1.0/6.0,1.0/2.0,1.0/6.0,1.0/6.0/)
+      TG=(/1.0/4.0,1.0/6.0,1.0/6.0,1.0/2.0,1.0/6.0/)
+      WG=(/-4.0/(5.0*6.0),9.0/(20.0*6.0),9.0/(20.0*6.0)
+     & ,9.0/(20.0*6.0),9.0/(20.0*6.0)/)
+
+      p=1
+
+      DO i = 1,3
+          DO j =1,12
+            PHI(i,j)=0.0d0
+          ENDDO
+      ENDDO
+
+      DO e =1,nelem
+          DO i = 1,4
+            idnodes(i) = elements(e,i)
+    !                          python indexing
+            dofx(i)    = (idnodes(i)-1)*3
+            dofy(i)    = (idnodes(i)-1)*3+1
+            dofz(i)    = (idnodes(i)-1)*3+2
+          ENDDO
+          DO i = 1,4
+            dofelem(1+3*(i-1)) = dofx(i)
+            dofelem(2+3*(i-1)) = dofy(i)
+            dofelem(3+3*(i-1)) = dofz(i)
+          ENDDO
+
+          DO i = 1,4
+            X(i)=nodes(idnodes(i),1)
+            Y(i)=nodes(idnodes(i),2)
+            Z(i)=nodes(idnodes(i),3)
+          ENDDO
+
+          a34(1,1) = X(1);a34(1,2) = X(2)
+          a34(1,3) = X(3);a34(1,4) = X(4)
+          a34(2,1) = Y(1);a34(2,2) = Y(2)
+          a34(2,3) = Y(3);a34(2,4) = Y(4)
+          a34(3,1) = Z(1);a34(3,2) = Z(2)
+          a34(3,3) = Z(3);a34(3,4) = Z(4)
+          det_of_sys = det44_ligne_de_un(a34)
+          Vol        = ABS(det_of_sys/6.0)
+
+          DO i = 1,12
+            DO j =1,12
+                me(i,j)=0.0d0
+            ENDDO
+          ENDDO
+
+    !       loop over Gauss Points
+          DO g=1,npgt
+
+            NN(1)=RG(g);NN(2)=SG(g);NN(3)=TG(g)
+            NN(4)=1-RG(g)-SG(g)-TG(g)
+
+            PHI(1,1)=NN(1);PHI(1,4)=NN(2);PHI(1,7)=NN(3);PHI(1,10)=NN(4)
+            PHI(2,2)=NN(1);PHI(2,5)=NN(2);PHI(2,8)=NN(3);PHI(2,11)=NN(4)
+            PHI(3,3)=NN(1);PHI(3,6)=NN(2);PHI(3,9)=NN(3);PHI(3,12)=NN(4)
+
+            me = me + MATMUL(TRANSPOSE(PHI),PHI)*rho*WG(g)*Vol*6.0
+
+          ENDDO
+
+          DO i = 1,12
+            DO j =1,12
+                Ik(p)=dofelem(i)
+                Jk(p)=dofelem(j)
+                Vk(p)=me(i,j)
+                p=p+1
+            ENDDO
+          ENDDO
+      ENDDO
+
+      RETURN
+      END SUBROUTINE MassMatrix
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 C stress smoothing
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
