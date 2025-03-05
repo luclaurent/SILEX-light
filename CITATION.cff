@@ -1,0 +1,32 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: SILEXlight
+type: software
+authors:
+  - given-names: Antoine 
+    family-names: Legay
+    email: antoine.legay@lecnam.net
+    affiliation: "Laboratoire de Mécanique des structures et des systèmes couplés, Conservatoire national des arts et métiers, Paris, France"
+    orcid: "https://orcid.org/0000-0001-6836-3009"
+  - given-names: Luc
+    family-names: Laurent
+    email: luc.laurent@lecnam.net
+    affiliation: "Laboratoire de Mécanique des structures et des systèmes couplés, Conservatoire national des arts et métiers, Paris, France"
+    orcid: "https://orcid.org/0000-0002-8935-5929"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.xxxx
+repository-code: "https://github.com/luclaurent/SILEXlight"
+repository: "https://pypi.org/project/SILEXlight"
+abstract: >-
+  SILEX is a finite element code written in Python language, eventually with a Fortran part in order to speed up the computations and mainly dedicated to educational purposes.
+keywords:
+  - finite elements
+  - structural mechanics
+  - educational software
+  - Python
+  - Fortran
+license: LGPL-3.0
+doi: 10.5281/zenodo.xxxxxx
