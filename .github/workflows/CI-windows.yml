@@ -46,4 +46,4 @@ jobs:
         # f2py -c --help-fcompiler        
     - name: Run tests
       run: |
-        pytest --pyargs SILEXlight.tests
+        python -m pytest --pyargs SILEXlight.tests
