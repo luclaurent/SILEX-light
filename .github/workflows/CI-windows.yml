@@ -1,6 +1,6 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 
-name: CI-ubuntu-pypi
+name: CI-windows
 
 on:
   push:
@@ -16,39 +16,34 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     timeout-minutes: 30
+    env:
+      # gcc/gfortran version
+      version: 13 
     strategy:
       matrix:
-        python-version: ['3.8'] #['3.8', '3.9', '3.10', '3.11']        
+        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13' ]        
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@main
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@main
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install gfortran
-      run: |
-          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-          sudo apt-get update
-          sudo apt-get install -y gcc-${version} gfortran-${version}
-          sudo update-alternatives \
-            --install /usr/bin/gcc gcc /usr/bin/gcc-${version} 100 \
-            --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-${version} \
-            --slave /usr/bin/gcov gcov /usr/bin/gcov-${version}
-          export FC="gfortran"
-          export CC="gcc"
-          export CXX="g++"
+    - uses: fortran-lang/setup-fortran@v1
+      id: setup-fortran
+      with:
+        compiler: gcc
+        version: ${{ env.version }}
     - name: Check gfortran's version
       run: gfortran --version
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip pytest pytest-cov pytest-flakes setuptools
     - name: Install the package
       run: |
-        pip install -v SILEXlight
+        pip install -v .
+        # Show f2py compiler info for debug
+        # f2py -c --help-fcompiler        
     - name: Run tests
       run: |
         pytest --pyargs SILEXlight.tests
