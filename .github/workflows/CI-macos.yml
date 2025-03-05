@@ -60,7 +60,7 @@ jobs:
             export CXX="g++"
     - name: Check gfortran's version
       run: |
-            ll /usr/local/bin/
+            ls -la /usr/local/bin/
             which gfortran            
             gfortran --version
     - name: Install the package
