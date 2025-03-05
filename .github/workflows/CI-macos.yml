@@ -60,6 +60,8 @@ jobs:
             export CXX="g++"
     - name: Check gfortran's version
       run: |
+            echo $PATH
+            gfortran-14 --version
             ls -la /usr/local/bin/
             which gfortran            
             gfortran --version
