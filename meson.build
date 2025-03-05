@@ -152,4 +152,17 @@ py.install_sources([
   subdir: 'SILEXlight'
   )
 
+py.install_sources([
+  'SILEXlight/__init__.py',
+  'SILEXlight/tests/test_silex_lib_gmsh.py',
+  'SILEXlight/tests/test_silex_lib_tet4_fortran.py',
+  'SILEXlight/tests/test_silex_lib_tet4_python.py',
+  'SILEXlight/tests/test_silex_lib_tri3_fortran.py',
+  'SILEXlight/tests/test_silex_lib_tri3_python.py',
+  ],
+  pure: false,
+  preserve_path: false,
+  subdir: 'SILEXlight/tests'
+  )
+
 

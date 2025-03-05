@@ -74,7 +74,7 @@ addopts = "--cov --cov-report html --cov-report term-missing --cov-fail-under 1"
 
 [tool.coverage.run]
 branch = true
-command_line = "-m unittest discover -s src/tests/"
+command_line = "-m unittest discover -s tests/"
 
 [tool.coverage.html]
 directory = "coverage_html_report"
