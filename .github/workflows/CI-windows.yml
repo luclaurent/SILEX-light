@@ -39,9 +39,12 @@ jobs:
         version: ${{ env.version }}
     - name: Check gfortran's version
       run: gfortran --version
+    - name: Install dependencies for installing package without isolation
+      run: |
+        pip install meson-python ninja numpy
     - name: Install the package
       run: |
-        pip install -v .[test]
+        pip install -v --no-build-isolation -e .[test]
         # Show f2py compiler info for debug
         # f2py -c --help-fcompiler        
     - name: Run tests
