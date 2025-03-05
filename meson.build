@@ -154,6 +154,7 @@ py.install_sources([
 
 py.install_sources([
   'SILEXlight/__init__.py',
+  'SILEXlight/tests/__init__.py',
   'SILEXlight/tests/test_silex_lib_gmsh.py',
   'SILEXlight/tests/test_silex_lib_tet4_fortran.py',
   'SILEXlight/tests/test_silex_lib_tet4_python.py',
