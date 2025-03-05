@@ -59,7 +59,10 @@ jobs:
             export CC="gcc"
             export CXX="g++"
     - name: Check gfortran's version
-      run: gfortran --version
+      run: |
+            which gfortran
+            ll /usr/local/bin/
+            gfortran --version
     - name: Install the package
       run: |
         pip install -v .[test]
