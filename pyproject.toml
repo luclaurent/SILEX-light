@@ -1,6 +1,16 @@
 [build-system]
-requires = ["setuptools","numpy","wheel"]
-build-backend = "setuptools.build_meta"
+build-backend = "mesonpy"#"hatchling.build" #"mesonpy"
+requires = [
+    "hatch-meson",
+    "numpy", 
+    "meson-python"
+    ]
+
+[tool.meson-python.args]
+# setup = ['-Doption=false', '-Dfeature=enabled', '-Dvalue=42']
+compile = ['-j8']
+# install = ['--tags=bindings']
+# dist = ['--include-subprojects']
 
 [project]
 name = "SILEXlight"
@@ -12,49 +22,69 @@ maintainers = [
      {name = "Luc Laurent", email = "luc.laurent@lecnam.net"},
 ]
 description = "Basic SILEX library"
-requires-python = ">=3.7"
-license = {text = "LGPLv3"}
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
 classifiers = [
-    "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Fortran",
     "Intended Audience :: Education",
     "Topic :: Education",
     "Topic :: Scientific/Engineering :: Physics"
 ]
 dependencies = [
-    "numpy", "scipy"
+    "numpy", 
+    "scipy"
 ]
-dynamic = ["version", "readme"]
+readme = "README.md"
+dynamic = ["version"]
 
-[tool.setuptools.dynamic]
-readme = {file = ["README.md"], content-type = "text/markdown"}
+# [tool.setuptools.dynamic]
+# readme = { file = ["README.md"], content-type = "text/markdown" }
+
+[tool.hatch.version]
+path = "SILEXlight/__init__.py"
 
 [project.urls]
 homepage = "https://antoinelegay.free.fr"
 repository = "https://github.com/luclaurent/SILEX-light"
 
 [project.optional-dependencies]
-dev = [
-    "pylint ~=2.14.0",
-    "toml ~=0.10.2",
-    "yapf ~=0.32.0",
-]
-test = [
-    "pytest-cov ~=3.0.0",
-]
+dev = ["pylint ~=2.14.0", "toml ~=0.10.2", "yapf ~=0.32.0"]
+test = ["pytest", "pytest-cov[all]", "pytest-benchmark"]
+
+[tool.hatch.build]
+# packages = ["SILEXlib"]
+only-packages = true
+ignore-vcs = false
+
+[tool.hatch.build.hooks.meson]
+[tool.hatch.metadata.hooks.meson]
 
 [tool.pytest.ini_options]
 addopts = "--cov --cov-report html --cov-report term-missing --cov-fail-under 1"
 
+
 [tool.coverage.run]
-source = ["SILEXlight"]
+branch = true
+command_line = "-m unittest discover -s src/tests/"
+
+[tool.coverage.html]
+directory = "coverage_html_report"
+
+[tool.ruff]
+# Allow lines to be as long as 120.
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "single"
 
 [tool.cibuildwheel]
 test-requires = "pytest"
@@ -64,14 +94,7 @@ manylinux-x86_64-image="manylinux2014"
 [tool.cibuildwheel.linux]
 repair-wheel-command = "auditwheel repair -w {dest_dir} {wheel}"
 
-[[tool.cibuildwheel.overrides]]
-select = "cp3{8,9,10,11}-*"
+# [[tool.cibuildwheel.overrides]]
+# select = "cp3{9,10,11,12,13}-*"
 
 
-
-# [tool.setuptools]
-# package-dir = {"" = "src"}
-
-# [tool.setuptools.dynamic]
-# version = {attr = "SILEX-light.__version__"}
-# readme = {file = ["README.md"]}

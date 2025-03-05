@@ -131,4 +131,5 @@ dmypy.json
 
 
 ######
-calculs/piston/*.msh
+*.msh
+*.o
