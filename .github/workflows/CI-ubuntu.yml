@@ -51,7 +51,7 @@ jobs:
       run: |
         pip install -v .[test]
         # Show f2py compiler info for debug
-        f2py -c --help-fcompiler        
+        # f2py -c --help-fcompiler        # meson must be installed
     - name: Run tests
       run: |
         pytest --pyargs SILEXlight.tests
