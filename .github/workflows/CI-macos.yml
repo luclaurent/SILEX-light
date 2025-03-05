@@ -60,13 +60,9 @@ jobs:
             export CXX="g++"
     - name: Check gfortran's version
       run: gfortran --version
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip pytest pytest-cov pytest-flakes setuptools
     - name: Install the package
       run: |
-        export SETUPTOOLS_ENABLE_FEATURES="legacy-editable"
-        pip install -v -e .
+        pip install -v .[test]
         # Show f2py compiler info for debug
         f2py -c --help-fcompiler        
     - name: Run tests

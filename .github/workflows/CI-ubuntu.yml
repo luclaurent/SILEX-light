@@ -49,7 +49,7 @@ jobs:
       run: gfortran --version
     - name: Install the package
       run: |
-        pip install -v .
+        pip install -v .[test]
         # Show f2py compiler info for debug
         f2py -c --help-fcompiler        
     - name: Run tests
