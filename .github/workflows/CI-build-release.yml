@@ -23,6 +23,9 @@ jobs:
       - uses: actions/setup-python@main
         with:
           python-version: "3.x"
+      - name: Set env
+        if: runner.os == 'macos-13' 
+        run: echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
       - uses: fortran-lang/setup-fortran@v1
         id: setup-fortran
         with:
@@ -30,7 +33,6 @@ jobs:
           version: ${{ env.version }}
       - name: Check gfortran's version
         run: gfortran --version
-
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.23.0
         env:
