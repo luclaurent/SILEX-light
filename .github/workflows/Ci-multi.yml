@@ -1,0 +1,54 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+
+name: CI-windows
+
+on:
+  push:
+    branches: [ '*' ]
+    paths-ignore:         # Don't trigger on files that are updated by the CI
+      - README.md
+  pull_request:
+    branches: [ '*' ]
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # run at 02:01 on the 3rd of each month
+    - cron:  '1 2 3 * *'    
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      # gcc/gfortran version
+      version: 13 # versions https://github.com/fortran-lang/setup-fortran/?tab=readme-ov-file#runner-compatibility
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13' ]        
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-13, macos-latest, windows-latest] #macos-13 = intel
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@main
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@main
+      with:
+        python-version: ${{ matrix.python-version }}
+    - uses: fortran-lang/setup-fortran@v1
+      id: setup-fortran
+      with:
+        compiler: gcc
+        version: ${{ env.version }}
+    - name: Check gfortran's version
+      run: gfortran --version
+    - name: Install dependencies for installing package without isolation
+      run: |
+        pip install meson-python ninja numpy
+    - name: Install the package
+      run: |
+        pip install -v --no-build-isolation -e .[test]
+        # Show f2py compiler info for debug
+        # f2py -c --help-fcompiler        
+    - name: Run tests
+      run: |
+        python -m pytest --pyargs SILEXlight.tests
