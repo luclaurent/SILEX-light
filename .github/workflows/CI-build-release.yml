@@ -125,8 +125,7 @@ jobs:
       Publish Python 🐍 distribution 📦 to PyPI
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     needs:
-    - build_sdist
-    - build_wheels
+    - github-release
     runs-on: ubuntu-latest
     environment:
       name: pypi
