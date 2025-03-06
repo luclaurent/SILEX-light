@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: "3.x"
       - name: Set env
-        if: runner.os == 'macos-13' 
+        if: ${{ matrix.buildplat == 'macos-13' }}
         run: echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
       - uses: fortran-lang/setup-fortran@v1
         id: setup-fortran
