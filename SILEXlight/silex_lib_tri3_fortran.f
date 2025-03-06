@@ -500,17 +500,21 @@ c        ErrElem(i) = sqrt(ErrElem(i))
       end
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      subroutine forceonline(nbnodes,nodes,nbelem,elements,
-     &                            fs,pts,F)
+      subroutine forceonline(nbnodes,
+     &    nodes,
+     &    nbelem,
+     &    elements,
+     &    fs,
+     &    pts,
+     &    F)
 
-      ! nodes: node coordinates
-      ! elements: 2-node line elements on which the force is applied
-      ! fs=[  surf. load on pt1 x-direc  , surf. load on pt1 y-direc   ,   surf. load on pt2 x-direc  , surf. load on pt2 y-direc   ]
-      ! fs; units = Pa per length OR MPa per length
-      ! pts=[ pt 1 x, pt 1 y , pt 2 x , pt 2 y]
+
+      implicit none
 
       integer nbnodes,nbelem
-      double precision nodes(nbnodes,2),fs(4),pts(4)
+      double precision nodes(nbnodes,2)
+      double precision fs(4)
+      double precision pts(4)
       integer elements(nbelem,2)
       double precision F(2*nbnodes)
 
@@ -522,10 +526,28 @@ Cf2py intent(in) fs
 Cf2py intent(in) pts
 Cf2py intent(out) F
 
-      double precision rg(2),wg(2),xnodes(2),ynodes(2),lelem,N(2)
-      double precision forceelem(4),x,y,l0,l1,Phi(2,4),forcegausspt(2)
-      integer i,e,g,idnodes(2),dofx(2),dofy(2)
-      double precision forcex,forcey
+      double precision rg(2)
+      double precision wg(2)
+      double precision xnodes(2)
+      double precision ynodes(2)
+      double precision lelem
+      double precision N(2)
+      double precision forceelem(4)
+      double precision x
+      double precision y
+      double precision l0
+      double precision l1
+      double precision Phi(2,4)
+      double precision Phit(4,2)
+      double precision forcegausspt(2)
+      integer i
+      integer e
+      integer g
+      integer idnodes(2)
+      integer dofx(2)
+      integer dofy(2)
+      double precision forcex
+      double precision forcey
 
       rg(1)=-1.0/dsqrt(3.0d0)
       rg(2)=1.0/dsqrt(3.0d0)
@@ -533,7 +555,7 @@ Cf2py intent(out) F
       wg(2)=1.0
 
       do i=1,2*nbnodes
-        F=0.0d0
+        F(i)=0.0d0
       enddo
 
       do e=1,nbelem
@@ -557,41 +579,41 @@ Cf2py intent(out) F
         enddo
 
         do g=1,2
-            N(1) = (1-rg(g))*0.5d0
-            N(2) = (1+rg(g))*0.5d0
-            x = N(1)*xnodes(1)+N(2)*xnodes(2)
-            y = N(1)*ynodes(1)+N(2)*ynodes(2)
-            !pts=[ pt 1 x, pt 1 y , pt 2 x , pt 2 y]
-            l0=dsqrt((pts(1)-x)**2+(pts(2)-y)**2)
-            l1=dsqrt((pts(3)-x)**2+(pts(4)-y)**2)
+          N(1) = (1-rg(g))*0.5d0
+          N(2) = (1+rg(g))*0.5d0
+          x = N(1)*xnodes(1)+N(2)*xnodes(2)
+          y = N(1)*ynodes(1)+N(2)*ynodes(2)
+          !pts=[ pt 1 x, pt 1 y , pt 2 x , pt 2 y]
+          l0=dsqrt((pts(1)-x)**2+(pts(2)-y)**2)
+          l1=dsqrt((pts(3)-x)**2+(pts(4)-y)**2)
 
-            ! fs=[  fs-1-x , fs-1-y , fs-2-x  , fs-2-y   ]
-            forcex=(l1*fs(1)+l0*fs(3))/(l0+l1)
-            forcey=(l1*fs(2)+l0*fs(4))/(l0+l1)
+          ! fs=[  fs-1-x , fs-1-y , fs-2-x  , fs-2-y   ]
+          forcex=(l1*fs(1)+l0*fs(3))/(l0+l1)
+          forcey=(l1*fs(2)+l0*fs(4))/(l0+l1)
+          
+          Phi(1,1)=N(1)
+          Phi(1,2)=0.0d0
+          Phi(1,3)=N(2)
+          Phi(1,4)=0.0d0
+          Phi(2,1)=0.0d0
+          Phi(2,2)=N(1)
+          Phi(2,3)=0.0d0
+          Phi(2,4)=N(2)
+          Phit = transpose(Phi)
 
-            Phi(1,1)=N(1)
-            Phi(1,2)=0.0d0
-            Phi(1,3)=N(2)
-            Phi(1,4)=0.0d0
-            Phi(2,1)=0.0d0
-            Phi(2,2)=N(1)
-            Phi(2,3)=0.0d0
-            Phi(2,4)=N(2)
+          forcegausspt(1)=forcex
+          forcegausspt(2)=forcey
+          
+          forceelem=forceelem
+     &       +matmul(Phit,forcegausspt)*wg(g)*0.5d0*lelem
 
-            forcegausspt(1)=forcex
-            forcegausspt(2)=forcey
-            
-            forceelem=forceelem
-     &          +matmul(transpose(Phi),forcegausspt)*wg(g)*0.5d0*lelem
         enddo
-
         F(dofx(1))=F(dofx(1))+forceelem(1)
         F(dofy(1))=F(dofy(1))+forceelem(2)
         F(dofx(2))=F(dofx(2))+forceelem(3)
         F(dofy(2))=F(dofy(2))+forceelem(4)
-
       enddo
+      
 
       return
       end
-
