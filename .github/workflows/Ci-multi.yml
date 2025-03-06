@@ -7,6 +7,8 @@ on:
     branches: [ '*' ]
     paths-ignore:         # Don't trigger on files that are updated by the CI
       - README.md
+    tags:
+      - 'v*'
   pull_request:
     branches: [ '*' ]
   schedule:
