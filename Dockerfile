@@ -23,7 +23,7 @@ USER $NB_UID
     
 
 RUN BASE_DATA_PYTHON=$(python -c "from sysconfig import get_paths;print(get_paths()['data'])") &&\
-    pip install pytest &&\
+    pip install pytest gmsh&&\
     pip install -v -Ccmake.define.MUMPS_ROOT=${BASE_DATA_PYTHON}/ https://github.com/luclaurent/pymumps/archive/refs/heads/main.zip
 RUN pip install git+https://github.com/luclaurent/SILEX-light
 RUN pytest --pyargs mumps
