@@ -7,6 +7,6 @@
 numpy
 scipy
 # pymumps
-https://github.com/luclaurent/PyMumps
+git+https://github.com/luclaurent/PyMumps
 # SILEX-light
-https://github.com/luclaurent/SILEX-light
+git+https://github.com/luclaurent/SILEX-light
