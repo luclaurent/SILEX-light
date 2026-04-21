@@ -1,4 +1,4 @@
-name: 'Build SILEX-docker'
+name: 'Build SILEX-light docker container'
 
 on:
   push:
