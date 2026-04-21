@@ -19,7 +19,6 @@ COPY install_MUMPS.sh /tmp/install_MUMPS.sh
 RUN mkdir /tmp/mumps &&\
     chmod +x /tmp/install_MUMPS.sh &&\
     /tmp/install_MUMPS.sh /tmp/mumps
-USER $NB_UID
     
 
 RUN BASE_DATA_PYTHON=$(python -c "from sysconfig import get_paths;print(get_paths()['data'])") &&\
@@ -28,6 +27,13 @@ RUN BASE_DATA_PYTHON=$(python -c "from sysconfig import get_paths;print(get_path
 RUN pip install git+https://github.com/luclaurent/SILEX-light
 RUN pytest --pyargs mumps
 COPY calculs work/calculs
-USER root
-RUN chown -R $NB_USER:$NB_GROUP work/calculs
+
+RUN chown -R jovyan:users work/calculs
+RUN mkdir /home/jovyan/external && \
+    mkdir -p /home/jovyan/install
+
+VOLUME /home/jovyan/external
+
 USER $NB_UID
+
+EXPOSE 8888
