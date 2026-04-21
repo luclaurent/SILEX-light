@@ -31,7 +31,7 @@ jobs:
       - name: Set env
         if: ${{ matrix.buildplat == 'macos-13' }}
         run: echo "MACOSX_DEPLOYMENT_TARGET=13.0" >> $GITHUB_ENV
-      - uses: fortran-lang/setup-fortran@v1
+      - uses: fortran-lang/setup-fortran@main
         id: setup-fortran
         with:
           compiler: gcc
@@ -46,7 +46,7 @@ jobs:
         with:
           output-dir: wheelhouse
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@main
         with:
           name: ${{ matrix.python }}-${{ matrix.buildplat }}
           path: ./wheelhouse/*.whl
@@ -60,7 +60,7 @@ jobs:
       - name: Build sdist
         run: pipx run build --sdist
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@main
         with:
           name: SDist
           path: dist/*.tar.gz
@@ -81,7 +81,7 @@ jobs:
 
     steps:
       - name: Download all the dists
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@main
         with:
           path: dist/
           merge-multiple: true
@@ -128,7 +128,7 @@ jobs:
 
     steps:
       - name: Download all the dists
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@main
         with:
           path: dist/
           merge-multiple: true
