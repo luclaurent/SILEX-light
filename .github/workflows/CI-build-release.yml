@@ -39,7 +39,7 @@ jobs:
       - name: Check gfortran's version
         run: gfortran --version
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.23.0
+        uses: pypa/cibuildwheel@v3.4.1
         env:
           CIBW_BUILD: ${{ matrix.python }}-*
           CIBW_SKIP: "*-win32 *i686 *musllinux*"
@@ -81,7 +81,7 @@ jobs:
 
     steps:
       - name: Download all the dists
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist/
           merge-multiple: true
