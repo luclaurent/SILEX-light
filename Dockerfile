@@ -12,8 +12,7 @@ RUN sudo apt-get update && sudo apt-get install -yy \
           libblas-dev \
           liblapack-dev \
           libopenmpi-dev \
-          libglu1-mesa
-          
+          gmsh
 
           
 COPY install_MUMPS.sh /tmp/install_MUMPS.sh
