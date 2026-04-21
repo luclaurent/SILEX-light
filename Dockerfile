@@ -11,7 +11,8 @@ RUN sudo apt-get update && sudo apt-get install -yy \
           gfortran \
           libblas-dev \
           liblapack-dev \
-          libopenmpi-dev
+          libopenmpi-dev \
+          libglu1-mesa
           
 
           
