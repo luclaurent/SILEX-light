@@ -22,7 +22,7 @@ The image is built from Docker's image `jupyter/scipy-notebook`.
 ## Usage of the docker container
 
 1) Pull the docker image using `docker pull ghcr.io/luclaurent/silex-light:latest`
-2) Run `docker run --rm -d -p 8889:8888 -v <PATH>:/home/jovyan/external silex-light:latest`. `<PATH>` must be replace by a 
+2) Run `docker run --rm -d -p 8889:8888 -v <PATH>:/home/jovyan/external silex-light:latest`. `<PATH>` must be replace by a local folder path.
 3) Replace on the link provided by Docker's logs 8888 by 8889 in your browser.
 
 NB: full sudo access can be activated with the following syntax: `docker run --rm -d -p 8889:8888 -e GRANT_SUDO=yes --user root -v <PATH>:/home/jovyan/external silex-light:latest`.
