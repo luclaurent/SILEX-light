@@ -17,6 +17,15 @@ SILEX is a finite element code written in Python language, eventually with a For
 * A complete example of the use of SILEX on a piston is available [here](calculs/piston_readme.md) in english ([french version](calculs/piston_readme_fr.md))
 * A example pratical work for education is provided on a landing gear fork [here](calculs/fork_readme.md) in english ([french version](calculs/fork_readme_fr.md))
 * Execution of `SILEX-light` can be done using binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/luclaurent/SILEX-light/HEAD?urlpath=%2Fdoc%2Ftree%2Fwork%2Fcalculs%2Findex_calculs.ipynb)
+The image is built from Docker's image `jupyter/scipy-notebook`.
+
+## Usage of the docker container
+
+1) Pull the docker image using `docker pull ghcr.io/luclaurent/silex-light:latest`
+2) Run `docker run --rm -d -p 8889:8888 -v <PATH>:/home/jovyan/external silex-light:latest`. `<PATH>` must be replace by a 
+3) Replace on the link provided by Docker's logs 8888 by 8889 in your browser.
+
+NB: full sudo access can be activated with the following syntax: `docker run --rm -d -p 8889:8888 -e GRANT_SUDO=yes --user root -v <PATH>:/home/jovyan/external silex-light:latest`.
 
 ## Installation
 Classical installation by executing
