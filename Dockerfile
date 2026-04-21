@@ -29,5 +29,5 @@ RUN pip install git+https://github.com/luclaurent/SILEX-light
 RUN pytest --pyargs mumps
 COPY calculs work/calculs
 USER root
-RUN chown -R $NB_USER:$NB_USER work/calculs
+RUN chown -R $NB_USER:$NB_GROUP work/calculs
 USER $NB_UID
