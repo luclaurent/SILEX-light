@@ -28,3 +28,4 @@ RUN BASE_DATA_PYTHON=$(python -c "from sysconfig import get_paths;print(get_path
 RUN pip install git+https://github.com/luclaurent/SILEX-light
 RUN pytest --pyargs mumps
 COPY calculs work/calculs
+RUN chown -R $NB_USER:$NB_USER work/calculs
