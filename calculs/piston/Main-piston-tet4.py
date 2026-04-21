@@ -2,10 +2,13 @@
 #      Import libraries
 #############################################################################
 import string
+from pathlib import Path
 import time
 import numpy
 import scipy.sparse
 import scipy.sparse.linalg
+
+ROOT_DIR = Path(__file__).parent
 
 
 # Choose between the Fortran or the Python librairie:
@@ -28,9 +31,11 @@ tic = time.perf_counter()
 
 # Input mesh: define the name of the mesh file (*.msh)
 MeshFileName = 'piston-tet4'
+MeshFile = ROOT_DIR / MeshFileName
 
 # Output result file: define the name of the result file (*.msh)
 ResultsFileName = 'Results_piston_tet4'
+ResultsFile = ROOT_DIR / ResultsFileName
 
 # choose the element type
 eltype = 4
@@ -42,26 +47,26 @@ ndim = 3
 flag_write_fields = 0
 
 # read the mesh from gmsh
-nodes = silex_lib_gmsh.ReadGmshNodes(MeshFileName+'.msh', ndim)
+nodes = silex_lib_gmsh.ReadGmshNodes(MeshFile.with_suffix('.msh'), ndim)
 elements, Idnodes = silex_lib_gmsh.ReadGmshElements(
-    MeshFileName+'.msh', eltype, 5)
+    MeshFile.with_suffix('.msh'), eltype, 5)
 
 # read surfaces where to impose boundary conditions
 elementsS1, IdnodeS1 = silex_lib_gmsh.ReadGmshElements(
-    MeshFileName+'.msh', 2, 1)
+    MeshFile.with_suffix('.msh'), 2, 1)
 elementsS2, IdnodeS2 = silex_lib_gmsh.ReadGmshElements(
-    MeshFileName+'.msh', 2, 2)
+    MeshFile.with_suffix('.msh'), 2, 2)
 elementsS3, IdnodeS3 = silex_lib_gmsh.ReadGmshElements(
-    MeshFileName+'.msh', 2, 3)
+    MeshFile.with_suffix('.msh'), 2, 3)
 elementsS4, IdnodeS4 = silex_lib_gmsh.ReadGmshElements(
-    MeshFileName+'.msh', 2, 4)
+    MeshFile.with_suffix('.msh'), 2, 4)
 
 # write the surface mesh in a gmsh-format file to verify if its correct
-# silex_lib_gmsh.WriteResults(ResultsFileName+'Volum',nodes,elements,4)
-# silex_lib_gmsh.WriteResults(ResultsFileName+'surf1',nodes,elementsS1,2)
-# silex_lib_gmsh.WriteResults(ResultsFileName+'surf2',nodes,elementsS2,2)
-# silex_lib_gmsh.WriteResults(ResultsFileName+'surf3',nodes,elementsS3,2)
-# silex_lib_gmsh.WriteResults(ResultsFileName+'surf4',nodes,elementsS4,2)
+# silex_lib_gmsh.WriteResults(ResultsFile.with_stem('Volum'),nodes,elements,4)
+# silex_lib_gmsh.WriteResults(ResultsFile.with_stem('surf1'),nodes,elementsS1,2)
+# silex_lib_gmsh.WriteResults(ResultsFile.with_stem('surf2'),nodes,elementsS2,2)
+# silex_lib_gmsh.WriteResults(ResultsFile.with_stem('surf3'),nodes,elementsS3,2)
+# silex_lib_gmsh.WriteResults(ResultsFile.with_stem('surf4'),nodes,elementsS4,2)
 
 # Define material
 Young = 200000.0

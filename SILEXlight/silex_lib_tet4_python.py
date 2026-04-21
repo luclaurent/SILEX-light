@@ -8,7 +8,6 @@
 #############################################################################
 
 import numpy
-import scipy.sparse
 
 
 def det33_ligne_de_un(a):
@@ -603,6 +602,6 @@ def compute_stress_strain_error(nodes, elements, material, QQ):
         NormSig = NormSig+NormSigElt[e]
 
     ErrElem = ErrElem/NormSig
-    ErrGlob = scipy.sqrt(scipy.sum(ErrElem))
+    ErrGlob = numpy.sqrt(numpy.sum(ErrElem))
 
     return sigma, sig_smooth, EpsilonElem, EpsilonNodes, ErrElem, ErrGlob

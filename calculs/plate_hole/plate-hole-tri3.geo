@@ -1,5 +1,8 @@
 h = 5;
 Mesh.ElementOrder = 1;
+Mesh.Format = 1;
+Mesh.MshFileVersion = 2.2;
+
 Point(1) = {0, 50, 0, h};
 Point(2) = {0, 200, 0, h};
 Point(3) = {50, 0, 0, h};
@@ -19,3 +22,9 @@ Physical Line(1) = {1};
 Physical Line(2) = {2};
 Physical Line(3) = {4};
 Physical Surface(4) = {7};
+
+
+Mesh 2;
+// Save "piston-tet4.msh";
+
+// run gmsh piston-tet4-bis.geo -save

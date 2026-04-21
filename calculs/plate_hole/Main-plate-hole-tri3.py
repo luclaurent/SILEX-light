@@ -1,9 +1,14 @@
 #############################################################################
 #      Import libraries
 #############################################################################
-import string; import time; import numpy
+import time
+from pathlib import Path
+import numpy
 import scipy.sparse
 import scipy.sparse.linalg
+
+
+ROOT_DIR = Path(__file__).parent
 
 
 ## Choose between the Fortran or the Python librairie:
@@ -26,9 +31,11 @@ tic = time.perf_counter()
 
 # Input mesh: define the name of the mesh file (*.msh)
 MeshFileName='plate-hole-tri3'
+MeshFile = ROOT_DIR / MeshFileName
 
 # Output result file: define the name of the result file (*.msh)
 ResultsFileName='Results_plate-hole-tri3'
+ResultsFile = ROOT_DIR / ResultsFileName
 
 # choose the element type
 eltype=2
@@ -40,19 +47,19 @@ ndim=2
 flag_write_fields=1
 
 # read the mesh from gmsh
-nodes=silex_lib_gmsh.ReadGmshNodes(MeshFileName+'.msh',ndim)
-elements,Idnodes=silex_lib_gmsh.ReadGmshElements(MeshFileName+'.msh',eltype,4)
+nodes=silex_lib_gmsh.ReadGmshNodes(MeshFile.with_suffix('.msh'),ndim)
+elements,Idnodes=silex_lib_gmsh.ReadGmshElements(MeshFile.with_suffix('.msh'),eltype,4)
 
 # read surfaces where to impose boundary conditions
-elementsS1,IdnodeS1=silex_lib_gmsh.ReadGmshElements(MeshFileName+'.msh',1,1)
-elementsS2,IdnodeS2=silex_lib_gmsh.ReadGmshElements(MeshFileName+'.msh',1,2)
-elementsS3,IdnodeS3=silex_lib_gmsh.ReadGmshElements(MeshFileName+'.msh',1,3)
+elementsS1,IdnodeS1=silex_lib_gmsh.ReadGmshElements(MeshFile.with_suffix('.msh'),1,1)
+elementsS2,IdnodeS2=silex_lib_gmsh.ReadGmshElements(MeshFile.with_suffix('.msh'),1,2)
+elementsS3,IdnodeS3=silex_lib_gmsh.ReadGmshElements(MeshFile.with_suffix('.msh'),1,3)
 
 # write the surface mesh in a gmsh-format file to verify if its correct
-#silex_lib_gmsh.WriteResults(ResultsFileName+'_Surface_mesh',nodes,elements,2)
-#silex_lib_gmsh.WriteResults(ResultsFileName+'_S1_mesh',nodes,elementsS1,1)
-#silex_lib_gmsh.WriteResults(ResultsFileName+'_S2_mesh',nodes,elementsS2,1)
-#silex_lib_gmsh.WriteResults(ResultsFileName+'_S3_mesh',nodes,elementsS3,1)
+silex_lib_gmsh.WriteResults(ResultsFile.with_stem('_Surface_mesh'),nodes,elements,2)
+silex_lib_gmsh.WriteResults(ResultsFile.with_stem('_S1_mesh'),nodes,elementsS1,1)
+silex_lib_gmsh.WriteResults(ResultsFile.with_stem('_S2_mesh'),nodes,elementsS2,1)
+silex_lib_gmsh.WriteResults(ResultsFile.with_stem('_S3_mesh'),nodes,elementsS3,1)
 
 # Define material
 Young  = 200000.0

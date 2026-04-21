@@ -37,8 +37,14 @@ def WriteResults(filename, nodes, elements, elttype, fields=[]):
                     ]
 
     Returns string."""
+    
+    if not isinstance(filename, str):
+        filename = str(filename)
+    
+    if not filename.endswith('.msh'):
+        filename = filename + '.msh'
 
-    f = open(filename+'.msh', 'w')
+    f = open(filename, 'w')
 
     nnodes = nodes.shape[0]
     ndof = nnodes*2
@@ -236,6 +242,10 @@ def WriteResults(filename, nodes, elements, elttype, fields=[]):
 def ReadGmshNodes(file, nbcoord):
     import string
     import numpy
+    
+    if not isinstance(file, str):
+        file = str(file)
+    
     f = open(file, 'r')
     i = 0
     j = 0
