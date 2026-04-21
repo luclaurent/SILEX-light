@@ -2,7 +2,7 @@
 
  [![pypi release](https://img.shields.io/pypi/v/SILEXlight.svg)](https://test.pypi.org/project/SILEXlight/)  [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.14984402.svg)](http://dx.doi.org/10.5281/zenodo.14984402) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) ![PyPI - Downloads](https://img.shields.io/pypi/dm/SILEXlight)
 
-[![CI-multi](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-multi.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-multi.yml)  [![Wheels and sdist](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml)
+[![CI-multi](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-multi.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-multi.yml)  [![Wheels and sdist](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/luclaurent/SILEX-light/HEAD?urlpath=%2Fdoc%2Ftree%2Fcalculs%2Findex_calculs.ipynb)
 
 SILEX is a finite element code written in Python language, eventually with a Fortran part in order to speed up the computations.
     
