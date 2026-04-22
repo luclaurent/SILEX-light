@@ -2,6 +2,9 @@
 
 name: CI-multi
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ '*' ]
@@ -31,9 +34,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@main
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - uses: fortran-lang/setup-fortran@v1
