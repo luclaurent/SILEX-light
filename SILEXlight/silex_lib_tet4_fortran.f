@@ -9,13 +9,13 @@ c     f2py3 -c -m silex_lib_tet4_fortran silex_lib_tet4_fortran.f
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       subroutine CrossProduct(a,b,c)
-    c     Purpose: compute cross product c = a x b.
+c     Purpose: compute cross product c = a x b.
 c
 c     Inputs:
 c       a(3), b(3) : input vectors.
 c
 c     Output:
-c       c(3) : cross product vector.
+c   c(3) : cross product vector.
 
       double precision,intent(in) :: a(3),b(3)
       double precision,intent(out) :: c(3)
@@ -29,7 +29,7 @@ c       c(3) : cross product vector.
 
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function NormVector(a,n)
-    c     Purpose: compute Euclidean norm of vector a.
+c     Purpose: compute Euclidean norm of vector a.
 c
 c     Inputs:
 c       a(n) : input vector.
@@ -52,7 +52,7 @@ c       NormVector : sqrt(sum(a_i^2)).
 
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function det33_ligne_de_un(a)
-    c     Purpose: determinant of a 3x3 matrix with first row fixed to one.
+c     Purpose: determinant of a 3x3 matrix with first row fixed to one.
 c
 c     Input:
 c       a(2,3) : rows 2 and 3 of matrix with row 1 = [1,1,1].
@@ -74,7 +74,7 @@ c       det33_ligne_de_un : determinant value.
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function det33(a)
-    c     Purpose: determinant of a 3x3 matrix.
+c     Purpose: determinant of a 3x3 matrix.
 c
 c     Input:
 c       a(3,3) : dense matrix.
@@ -98,7 +98,7 @@ c       det33 : determinant value.
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function det44_ligne_de_un(a)
-    c     Purpose: determinant of a 4x4 matrix with first row fixed to one.
+c     Purpose: determinant of a 4x4 matrix with first row fixed to one.
 c
 c     Input:
 c       a(3,4) : rows 2-4 of matrix with row 1 = [1,1,1,1].
@@ -141,7 +141,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine StiffnessMatrix(nbnodes,nodes,
      &                           nbelem,elements,
      &                           material,Ik,Jk,Vk)
-    c     Purpose: assemble global TET4 stiffness in triplet arrays Ik, Jk, Vk.
+c     Purpose: assemble global TET4 stiffness in triplet arrays Ik, Jk, Vk.
 c
 c     Inputs:
 c       nbnodes             : number of nodes.
@@ -323,7 +323,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                      Ik,
      &                      Jk,
      &                      Vk)
-    c     Purpose: assemble global TET4 consistent mass in triplet arrays.
+c     Purpose: assemble global TET4 consistent mass in triplet arrays.
 c
 c     Inputs:
 c       nbnodes, nodes      : mesh nodes and coordinates.
@@ -445,7 +445,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                                       EpsilonNodes,
      &                                       ErrElem,
      &                                       ErrGlob)
-    c     Purpose: smooth stress field and compute element/global error metrics.
+c     Purpose: smooth stress field and compute element/global error metrics.
 c
 c     Inputs:
 c       nbnodes, nodes              : 3D node coordinates.
@@ -709,7 +709,7 @@ c      RG(4)=0.13819660;SG(4)=0.13819660;TG(4)=0.13819660;WG(4)=0.25/6.0
       RG(4)=1.0/6.0; SG(4)=1.0/6.0; TG(4)=1.0/2.0; WG(4)=9.0/(20.0*6.0)
       RG(5)=1.0/6.0; SG(5)=1.0/6.0; TG(5)=1.0/6.0; WG(5)=9.0/(20.0*6.0)
 
-c     compute energy norm of uh and sigma-smooth
+c compute energy norm of uh and sigma-smooth
       NormSig=0.0d0
       do e=1,nbelem
 
@@ -750,9 +750,9 @@ c         evaluate sigma at gauss point
           enddo
 
           do i=1,6
-            Cm1S(i)=0.0d0
+        cm1S(i)=0.0d0
             do j=1,6
-              Cm1S(i)=Cm1S(i)+CCinv(i,j)*sig(j)
+          cm1S(i)=Cm1S(i)+CCinv(i,j)*sig(j)
             enddo
           enddo
 
@@ -761,9 +761,9 @@ c         evaluate sigma at gauss point
           enddo
 
           do i=1,6
-            Cm1S(i)=0.0d0
+        cm1S(i)=0.0d0
             do j=1,6
-              Cm1S(i)=Cm1S(i)+CCinv(i,j)*sigdiff(j)
+          cm1S(i)=Cm1S(i)+CCinv(i,j)*sigdiff(j)
             enddo
           enddo
 
@@ -793,7 +793,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                          Press,
      &                          direction,
      &                          Fp)
-    c     Purpose: assemble equivalent nodal forces from surface pressure loads.
+c     Purpose: assemble equivalent nodal forces from surface pressure loads.
 c
 c     Inputs:
 c       nbnodes, nodes            : 3D node coordinates.

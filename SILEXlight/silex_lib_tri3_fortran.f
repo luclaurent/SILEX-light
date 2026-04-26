@@ -11,16 +11,16 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function det33_ligne_de_un(a)
 c     Purpose: determinant of a 3x3 matrix with first row equal to one.
-    c
-    c     Inputs:
-    c       a(2,3) : rows 2 and 3 of the target 3x3 matrix where row 1 is
-    c                implicitly [1, 1, 1].
-    c
-    c     Output:
-    c       det33_ligne_de_un : scalar determinant value.
-    c
-    c     Notes:
-    c       Used to evaluate geometric Jacobians/areas for TRI3 elements.
+c
+c     Inputs:
+c       a(2,3) : rows 2 and 3 of the target 3x3 matrix where row 1 is
+c                implicitly [1, 1, 1].
+c
+c     Output:
+c       det33_ligne_de_un : scalar determinant value.
+c
+c     Notes:
+c       Used to evaluate geometric Jacobians/areas for TRI3 elements.
       implicit none 
       double precision a(2,3)
       
@@ -38,19 +38,19 @@ c     Purpose: determinant of a 3x3 matrix with first row equal to one.
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine ElementalStiffness(X,Y,thickness,CC,ke)
 c     Purpose: compute local TRI3 stiffness matrix ke(6,6).
-    c
-    c     Inputs:
-    c       X(3), Y(3) : element nodal coordinates.
-    c       thickness  : element thickness.
-    c       CC(3,3)    : constitutive matrix (plane stress formulation).
-    c
-    c     Output:
-    c       ke(6,6) : elemental stiffness matrix ordered as
-    c                 [ux1, ux2, ux3, uy1, uy2, uy3].
-    c
-    c     Notes:
-    c       The routine computes B matrix terms from geometry and evaluates
-    c       ke = transpose(B) * C * B * Area * thickness.
+c
+c     Inputs:
+c       X(3), Y(3) : element nodal coordinates.
+c       thickness  : element thickness.
+c   cC(3,3)    : constitutive matrix (plane stress formulation).
+c
+c     Output:
+c       ke(6,6) : elemental stiffness matrix ordered as
+c                 [ux1, ux2, ux3, uy1, uy2, uy3].
+c
+c     Notes:
+c       The routine computes B matrix terms from geometry and evaluates
+c       ke = transpose(B) * C * B * Area * thickness.
       implicit none 
 
       double precision ke(6,6)
@@ -103,9 +103,9 @@ c     Purpose: compute local TRI3 stiffness matrix ke(6,6).
 
       do i=1,3
         do j=1,6
-          CB(i,j)=0.0d0
+      cB(i,j)=0.0d0
           do k=1,3
-            CB(i,j)=CB(i,j)+CC(i,k)*BB(k,j)
+        cB(i,j)=CB(i,j)+CC(i,k)*BB(k,j)
           enddo
         enddo
       enddo
@@ -128,22 +128,22 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                           nbelem,elements,
      &                           material,Ik,Jk,Vk)
 c     Purpose: assemble global TRI3 stiffness in triplet arrays Ik, Jk, Vk.
-    c
-    c     Inputs:
-    c       nbnodes          : number of nodes.
-    c       nodes(nbnodes,2) : nodal coordinates.
-    c       nbelem           : number of TRI3 elements.
-    c       elements(nbelem,3): connectivity (1-based node ids).
-    c       material(3)      : [Young, nu, thickness].
-    c
-    c     Outputs:
-    c       Ik, Jk : row/column indices of non-zero contributions.
-    c       Vk     : corresponding stiffness values.
-    c
-    c     Notes:
-    c       Indices are produced with Python-style dof numbering:
-    c       dof_x = 2*(node-1), dof_y = 2*(node-1)+1.
-    c       This output is intended for sparse matrix assembly from triplets.
+c
+c     Inputs:
+c       nbnodes          : number of nodes.
+c       nodes(nbnodes,2) : nodal coordinates.
+c       nbelem           : number of TRI3 elements.
+c       elements(nbelem,3): connectivity (1-based node ids).
+c       material(3)      : [Young, nu, thickness].
+c
+c     Outputs:
+c       Ik, Jk : row/column indices of non-zero contributions.
+c       Vk     : corresponding stiffness values.
+c
+c     Notes:
+c       Indices are produced with Python-style dof numbering:
+c       dof_x = 2*(node-1), dof_y = 2*(node-1)+1.
+c       This output is intended for sparse matrix assembly from triplets.
       implicit none 
 
       integer nbnodes,nbelem
@@ -225,20 +225,20 @@ c                          python indexing
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine ComputeElementalStress(X,Y,CC,Q,Sig,Eps,area)
 c     Purpose: compute elemental stress/strain and Von Mises stress.
-    c
-    c     Inputs:
-    c       X(3), Y(3) : element nodal coordinates.
-    c       CC(3,3)    : constitutive matrix.
-    c       Q(6)       : element displacement dofs in order
-    c                    [ux1, ux2, ux3, uy1, uy2, uy3].
-    c
-    c     Outputs:
-    c       Sig(4) : [sigma_xx, sigma_yy, sigma_xy, von_mises].
-    c       Eps(3) : [epsilon_xx, epsilon_yy, gamma_xy].
-    c       area   : signed elemental area/2 from the geometric determinant.
-    c
-    c     Notes:
-    c       Von Mises is evaluated in 2D from stress components.
+c
+c     Inputs:
+c       X(3), Y(3) : element nodal coordinates.
+c       CC(3,3)    : constitutive matrix.
+c       Q(6)       : element displacement dofs in order
+c                    [ux1, ux2, ux3, uy1, uy2, uy3].
+c
+c     Outputs:
+c       Sig(4) : [sigma_xx, sigma_yy, sigma_xy, von_mises].
+c       Eps(3) : [epsilon_xx, epsilon_yy, gamma_xy].
+c       area   : signed elemental area/2 from the geometric determinant.
+c
+c     Notes:
+c       Von Mises is evaluated in 2D from stress components.
       implicit none 
 
       double precision X(3),Y(3)
@@ -294,9 +294,9 @@ c     Purpose: compute elemental stress/strain and Von Mises stress.
 
       do i=1,3
         do j=1,6
-          CB(i,j)=0.0d0
+      cB(i,j)=0.0d0
           do k=1,3
-            CB(i,j)=CB(i,j)+CC(i,k)*BB(k,j)
+        cB(i,j)=CB(i,j)+CC(i,k)*BB(k,j)
           enddo
         enddo
       enddo
@@ -337,24 +337,24 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                                       ErrElem,
      &                                       ErrGlob)
 c     Purpose: smooth stress field and compute element/global error metrics.
-    c
-    c     Inputs:
-    c       nbnodes, nodes            : mesh nodes and coordinates.
-    c       nbelem, elements          : TRI3 connectivity (1-based node ids).
-    c       material(3)               : [Young, nu, thickness].
-    c       QQ(2*nbnodes)             : global displacement vector.
-    c
-    c     Outputs:
-    c       Sigma(nbelem,4)           : elemental stresses and von Mises.
-    c       sig_smooth(nbnodes,4)     : nodal smoothed stresses.
-    c       EpsilonElem(nbelem,3)     : elemental strains.
-    c       EpsilonNodes(nbnodes,3)   : nodal strains from smoothed stress.
-    c       ErrElem(nbelem)           : normalized element error indicators.
-    c       ErrGlob                   : global normalized error.
-    c
-    c     Notes:
-    c       Error is evaluated by comparing smoothed and elemental stress fields
-    c       in the energy norm with element-wise Gaussian quadrature.
+c
+c     Inputs:
+c       nbnodes, nodes            : mesh nodes and coordinates.
+c       nbelem, elements          : TRI3 connectivity (1-based node ids).
+c       material(3)               : [Young, nu, thickness].
+c       QQ(2*nbnodes)             : global displacement vector.
+c
+c     Outputs:
+c       Sigma(nbelem,4)           : elemental stresses and von Mises.
+c       sig_smooth(nbnodes,4)     : nodal smoothed stresses.
+c       EpsilonElem(nbelem,3)     : elemental strains.
+c       EpsilonNodes(nbnodes,3)   : nodal strains from smoothed stress.
+c       ErrElem(nbelem)           : normalized element error indicators.
+c       ErrGlob                   : global normalized error.
+c
+c     Notes:
+c       Error is evaluated by comparing smoothed and elemental stress fields
+c       in the energy norm with element-wise Gaussian quadrature.
       implicit none 
 
       integer nbnodes,nbelem
@@ -584,21 +584,21 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
      &    pts,
      &    F)
 c     Purpose: assemble equivalent nodal forces for distributed edge loads.
-    c
-    c     Inputs:
-    c       nbnodes, nodes           : 2D mesh nodes and coordinates.
-    c       nbelem, elements         : 2-node boundary edges (1-based ids).
-    c       fs(4)                    : distributed loads at segment endpoints,
-    c                                  [fx1, fy1, fx2, fy2] in force/length.
-    c       pts(4)                   : coordinates of interpolation segment,
-    c                                  [x1, y1, x2, y2].
-    c
-    c     Output:
-    c       F(2*nbnodes)             : assembled global nodal load vector.
-    c
-    c     Notes:
-    c       Uses 2-point Gauss integration on each edge and linearly interpolates
-    c       distributed load magnitude along the reference segment.
+c
+c     Inputs:
+c       nbnodes, nodes           : 2D mesh nodes and coordinates.
+c       nbelem, elements         : 2-node boundary edges (1-based ids).
+c       fs(4)                    : distributed loads at segment endpoints,
+c                                  [fx1, fy1, fx2, fy2] in force/length.
+c       pts(4)                   : coordinates of interpolation segment,
+c                                  [x1, y1, x2, y2].
+c
+c     Output:
+c       F(2*nbnodes)             : assembled global nodal load vector.
+c
+c     Notes:
+c       Uses 2-point Gauss integration on each edge and linearly interpolates
+c       distributed load magnitude along the reference segment.
 
 
       implicit none
