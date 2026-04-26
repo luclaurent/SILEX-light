@@ -1,3 +1,5 @@
+"""Plot convergence metrics for the piston benchmark case."""
+
 import numpy
 import pylab
 

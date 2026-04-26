@@ -3,6 +3,7 @@
  [![pypi release](https://img.shields.io/pypi/v/SILEXlight.svg)](https://test.pypi.org/project/SILEXlight/)  [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.14984402.svg)](http://dx.doi.org/10.5281/zenodo.14984402) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) ![PyPI - Downloads](https://img.shields.io/pypi/dm/SILEXlight)
 
 [![CI-multi](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-multi.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-multi.yml)  [![Wheels and sdist](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-build-release.yml) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/luclaurent/SILEX-light/HEAD?urlpath=%2Fdoc%2Ftree%2Fwork%2Fcalculs%2Findex_calculs.ipynb)
+[![Docs CI](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-docs-rtd.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-docs-rtd.yml) [![Coverage CI](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-coverage.yml/badge.svg)](https://github.com/luclaurent/SILEX-light/actions/workflows/CI-coverage.yml)
 
 SILEX is a finite element code written in Python language, eventually with a Fortran part in order to speed up the computations.
     
@@ -52,6 +53,30 @@ The used version and the associated doi must be adapted using data available on 
 The unit tests can be ran by using the following command
 
     pytest --pyargs SILEXlight.tests  
+
+## Build documentation
+
+Install docs dependencies:
+
+    pip install -e .[docs]
+
+Build HTML documentation with Sphinx:
+
+    sphinx-build -W -b html docs/source docs/_build/html
+
+## API Documentation Coverage
+
+Function-level API documentation is now maintained directly in:
+
+- `SILEXlight/silex_lib_gmsh.py`
+- `SILEXlight/silex_lib_tri3_python.py`
+- `SILEXlight/silex_lib_tet4_python.py`
+- `SILEXlight/version.py`
+
+The Fortran backends include routine-purpose comments in:
+
+- `SILEXlight/silex_lib_tri3_fortran.f`
+- `SILEXlight/silex_lib_tet4_fortran.f`
 
 ## License
 

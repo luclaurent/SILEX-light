@@ -9,6 +9,13 @@ c     f2py3 -c -m silex_lib_tet4_fortran silex_lib_tet4_fortran.f
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       subroutine CrossProduct(a,b,c)
+    c     Purpose: compute cross product c = a x b.
+c
+c     Inputs:
+c       a(3), b(3) : input vectors.
+c
+c     Output:
+c       c(3) : cross product vector.
 
       double precision,intent(in) :: a(3),b(3)
       double precision,intent(out) :: c(3)
@@ -22,6 +29,14 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function NormVector(a,n)
+    c     Purpose: compute Euclidean norm of vector a.
+c
+c     Inputs:
+c       a(n) : input vector.
+c       n    : vector size.
+c
+c     Output:
+c       NormVector : sqrt(sum(a_i^2)).
 
       integer n,i
       double precision a(n),tmp
@@ -37,6 +52,13 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function det33_ligne_de_un(a)
+    c     Purpose: determinant of a 3x3 matrix with first row fixed to one.
+c
+c     Input:
+c       a(2,3) : rows 2 and 3 of matrix with row 1 = [1,1,1].
+c
+c     Output:
+c       det33_ligne_de_un : determinant value.
       implicit none 
       double precision a(2,3)
       
@@ -52,6 +74,13 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function det33(a)
+    c     Purpose: determinant of a 3x3 matrix.
+c
+c     Input:
+c       a(3,3) : dense matrix.
+c
+c     Output:
+c       det33 : determinant value.
       implicit none 
   
       double precision a(3,3)
@@ -69,6 +98,13 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision function det44_ligne_de_un(a)
+    c     Purpose: determinant of a 4x4 matrix with first row fixed to one.
+c
+c     Input:
+c       a(3,4) : rows 2-4 of matrix with row 1 = [1,1,1,1].
+c
+c     Output:
+c       det44_ligne_de_un : determinant value.
       implicit none 
  
       double precision a(3,4)
@@ -105,6 +141,22 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine StiffnessMatrix(nbnodes,nodes,
      &                           nbelem,elements,
      &                           material,Ik,Jk,Vk)
+    c     Purpose: assemble global TET4 stiffness in triplet arrays Ik, Jk, Vk.
+c
+c     Inputs:
+c       nbnodes             : number of nodes.
+c       nodes(nbnodes,3)    : nodal coordinates.
+c       nbelem              : number of tetrahedral elements.
+c       elements(nbelem,4)  : connectivity (1-based node ids).
+c       material(2)         : [Young, nu].
+c
+c     Outputs:
+c       Ik, Jk : row/column dof indices of non-zero coefficients.
+c       Vk     : stiffness values matching Ik/Jk.
+c
+c     Notes:
+c       Indices are emitted using Python-style dof numbering
+c       (0-based) to match downstream sparse assembly in Python.
       implicit none 
 
       integer nbnodes,nbelem
@@ -271,6 +323,18 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                      Ik,
      &                      Jk,
      &                      Vk)
+    c     Purpose: assemble global TET4 consistent mass in triplet arrays.
+c
+c     Inputs:
+c       nbnodes, nodes      : mesh nodes and coordinates.
+c       nelem, elements     : TET4 connectivity (1-based ids).
+c       rho                 : mass density.
+c
+c     Outputs:
+c       Ik, Jk, Vk          : triplet representation of the mass matrix.
+c
+c     Notes:
+c       Uses 5-point tetrahedral quadrature and vector shape functions.
 
       IMPLICIT NONE
 
@@ -381,6 +445,25 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                                       EpsilonNodes,
      &                                       ErrElem,
      &                                       ErrGlob)
+    c     Purpose: smooth stress field and compute element/global error metrics.
+c
+c     Inputs:
+c       nbnodes, nodes              : 3D node coordinates.
+c       nbelem, elements            : tetrahedral connectivity (1-based ids).
+c       material(2)                 : [Young, nu].
+c       QQ(3*nbnodes)               : global displacement vector.
+c
+c     Outputs:
+c       Sigma(nbelem,7)             : elemental stresses and von Mises.
+c       sig_smooth(nbnodes,7)       : nodal smoothed stresses.
+c       EpsilonElem(nbelem,6)       : elemental strains.
+c       EpsilonNodes(nbnodes,6)     : nodal strains from smoothed stress.
+c       ErrElem(nbelem)             : normalized element error indicators.
+c       ErrGlob                     : global normalized error.
+c
+c     Notes:
+c       Error is computed in energy norm from the difference between
+c       elemental and smoothed stresses using tetrahedral quadrature.
       implicit none 
 
       integer nbnodes,nbelem
@@ -710,6 +793,21 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      &                          Press,
      &                          direction,
      &                          Fp)
+    c     Purpose: assemble equivalent nodal forces from surface pressure loads.
+c
+c     Inputs:
+c       nbnodes, nodes            : 3D node coordinates.
+c       nbelem, elements          : triangular surface elements (1-based ids).
+c       Press                     : pressure/traction magnitude.
+c       direction(3)              : if near zero vector, local face normal is used;
+c                                   otherwise the normalized input direction is used.
+c
+c     Output:
+c       Fp(3*nbnodes)             : assembled global nodal force vector.
+c
+c     Notes:
+c       Each triangular face contribution is distributed equally to its
+c       3 vertices after area scaling.
       implicit none 
 
       integer nbnodes,nbelem

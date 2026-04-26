@@ -1,3 +1,5 @@
+"""TET4 finite-element routines implemented in pure Python."""
+
 #############################################################################
 #                           SILEX CODE
 #                    4-node-tetrahedral element
@@ -11,10 +13,36 @@ import numpy
 
 
 def det33_ligne_de_un(a):
+    """Compute the determinant of a 3x3 matrix with first row fixed to ones.
+
+    Parameters
+    ----------
+    a : numpy.ndarray
+        Array of shape ``(2, 3)`` corresponding to rows 2 and 3 of the matrix
+        where row 1 is assumed to be ``[1, 1, 1]``.
+
+    Returns
+    -------
+    float
+        Determinant value.
+    """
     return a[0, 1]*a[1, 2]-a[0, 2]*a[1, 1]+a[0, 0]*(a[1, 1]-a[1, 2])+a[1, 0]*(a[0, 2]-a[0, 1])
 
 
 def det44_ligne_de_un(a):
+    """Compute the determinant of a 4x4 matrix with first row fixed to ones.
+
+    Parameters
+    ----------
+    a : numpy.ndarray
+        Array of shape ``(3, 4)`` corresponding to rows 2 to 4 of the matrix
+        where row 1 is assumed to be ``[1, 1, 1, 1]``.
+
+    Returns
+    -------
+    float
+        Determinant value.
+    """
     return a[0, 1]*(a[1, 2]*a[2, 3]-a[1, 3]*a[2, 2])+a[1, 1]*(-a[0, 2]*a[2, 3]+a[0, 3]*a[2, 2])+a[2, 1]*(a[0, 2]*a[1, 3]-a[0, 3]*a[1, 2])+a[0, 0]*(-a[1, 2]*a[2, 3]+a[1, 3]*a[2, 2]+a[1, 1]*(a[2, 3]-a[2, 2])+a[2, 1]*(-a[1, 3]+a[1, 2]))+a[1, 0]*(a[0, 2]*a[2, 3]-a[0, 3]*a[2, 2]+a[0, 1]*(-a[2, 3]+a[2, 2])+a[2, 1]*(a[0, 3]-a[0, 2]))+a[2, 0]*(-a[0, 2]*a[1, 3]+a[0, 1]*(a[1, 3]-a[1, 2])+a[0, 3]*(-a[1, 1]+a[1, 2])+a[0, 2]*a[1, 1])
 
 
@@ -23,6 +51,28 @@ def det44_ligne_de_un(a):
 #############################################################################
 
 def stiffnessmatrix(nodes, elements, material):
+    """Assemble TET4 stiffness coefficients in sparse triplet format.
+
+    Parameters
+    ----------
+    nodes : numpy.ndarray
+        Nodal coordinates with shape ``(n_nodes, 3)``.
+    elements : numpy.ndarray
+        Element connectivity with shape ``(n_elem, 4)`` using 1-based node ids.
+    material : array-like
+        Elastic material properties ``[Young, nu]``.
+
+    Returns
+    -------
+    tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]
+        ``(Ik, Jk, Vk)`` where each array has size ``12*12*n_elem``.
+        ``Ik`` and ``Jk`` are dof indices and ``Vk`` contains stiffness values.
+
+    Notes
+    -----
+    The output is designed for sparse assembly, for example with
+    ``scipy.sparse.coo_matrix((Vk, (Ik, Jk)))``.
+    """
 
     nelem = elements.shape[0]
     Ik = numpy.zeros(12*12*nelem, dtype=int)
@@ -193,6 +243,22 @@ def stiffnessmatrix(nodes, elements, material):
 #############################################################
 
 def massmatrix(nodes,elements,rho):
+    """Assemble TET4 consistent mass coefficients in sparse triplet format.
+
+    Parameters
+    ----------
+    nodes : numpy.ndarray
+        Nodal coordinates with shape ``(n_nodes, 3)``.
+    elements : numpy.ndarray
+        Element connectivity with shape ``(n_elem, 4)`` using 1-based node ids.
+    rho : float
+        Material density.
+
+    Returns
+    -------
+    tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]
+        ``(Ik, Jk, Vk)`` where each array has size ``12*12*n_elem``.
+    """
 
     nelem   = elements.shape[0]
     Ik      = numpy.zeros(12*12*nelem,dtype=int)
@@ -271,6 +337,26 @@ def massmatrix(nodes,elements,rho):
 ############################################################
 
 def forceonsurface(nodes, elements, press, direction):
+    """Assemble equivalent nodal forces on triangular surface elements.
+
+    Parameters
+    ----------
+    nodes : numpy.ndarray
+        Nodal coordinates with shape ``(n_nodes, 3)``.
+    elements : numpy.ndarray
+        Surface triangular connectivity with shape ``(n_face, 3)`` using
+        1-based node ids.
+    press : float
+        Pressure/traction magnitude.
+    direction : array-like
+        Load direction vector.
+        If its norm is near zero, local outward normal is used per face.
+
+    Returns
+    -------
+    numpy.ndarray
+        Global force vector of size ``3*n_nodes``.
+    """
     nbnodes = nodes.shape[0]
     nbelem = elements.shape[0]
     idnodes = numpy.zeros(3, dtype=int)
@@ -327,6 +413,29 @@ def forceonsurface(nodes, elements, press, direction):
 
 
 def compute_stress_strain_error(nodes, elements, material, QQ):
+    """Compute TET4 stress, strain and error estimators from displacements.
+
+    Parameters
+    ----------
+    nodes : numpy.ndarray
+        Nodal coordinates with shape ``(n_nodes, 3)``.
+    elements : numpy.ndarray
+        Element connectivity with shape ``(n_elem, 4)`` using 1-based node ids.
+    material : array-like
+        Elastic material properties ``[Young, nu]``.
+    QQ : numpy.ndarray
+        Global displacement vector of size ``3*n_nodes``.
+
+    Returns
+    -------
+    tuple
+        ``(sigma, sig_smooth, EpsilonElem, EpsilonNodes, ErrElem, ErrGlob)``.
+
+    Notes
+    -----
+    ``sigma`` and ``sig_smooth`` store 7 components per row:
+    ``[sxx, syy, szz, syz, sxz, sxy, von_mises]``.
+    """
     nbnodes = nodes.shape[0]
     nbelem = elements.shape[0]
     sigma = numpy.zeros((nbelem, 7), dtype=float)
