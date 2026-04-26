@@ -1,0 +1,70 @@
+name: CI-wiki-publish
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'SILEXlight/**'
+      - 'README.md'
+      - 'pyproject.toml'
+  workflow_dispatch:
+
+jobs:
+  publish-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran
+
+      - name: Install package and docs dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install meson-python ninja numpy
+          pip install --no-build-isolation -e .[test]
+          pip install -r docs/requirements.txt
+
+      - name: Build markdown docs
+        run: |
+          sphinx-build -b markdown docs/source docs/_build/wiki
+
+      - name: Publish to GitHub wiki
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki
+
+          rsync -av --delete --exclude '.git' docs/_build/wiki/ wiki/
+
+          cd wiki
+          if [ ! -f Home.md ]; then
+            if [ -f index.md ]; then
+              cp index.md Home.md
+            else
+              echo "# SILEXlight Wiki" > Home.md
+            fi
+          fi
+
+          git add .
+          if git diff --cached --quiet; then
+            echo "No wiki changes to publish."
+            exit 0
+          fi
+
+          git commit -m "docs: sync wiki from sphinx (${GITHUB_SHA})"
+          git push
