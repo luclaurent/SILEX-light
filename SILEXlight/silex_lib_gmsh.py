@@ -1,42 +1,52 @@
+"""Utilities for reading and writing Gmsh meshes and result fields."""
+
 def WriteResults(filename, nodes, elements, elttype, fields=[]):
-    """Write mesh and results in a gmsh-format file.
+    """Write a mesh and optional fields to a Gmsh ``.msh`` file.
 
-    syntax:
-        WriteResults(filename,nodes,elements,elttype,fields)
+    Parameters
+    ----------
+    filename : str or path-like
+        Output file name without or with ``.msh`` extension.
+    nodes : numpy.ndarray
+        Node coordinates, shape ``(n_nodes, 2)`` or ``(n_nodes, 3)``.
+    elements : numpy.ndarray
+        Element connectivity array.
+    elttype : int
+        Gmsh element type id.
 
-    inputs:
-        filename : string, name of the gmsh file (with no extension),
-                            may contain a repertory name
-        nodes    : nodes coordinates
-        elements : connectivity
-        elttype  : element type define as in gmsh (refer to gmsh documentation for numbering)
-                    1 : 2-node line
-                    2 : 3-node triangle
-                    3 : 4-node quadrangle
-                    4 : 4-node tetrahedron.
-                    5 : 8-node hexahedron.
-                    6 : 6-node prism.
-                    7 : 5-node pyramid.
-                    8 : 3-node second order line (2 nodes associated with the vertices and 1 with the edge).
-                    9 : 6-node second order triangle (3 nodes associated with the vertices and 3 with the edges).
-                    10: 9-node second order quadrangle (4 nodes associated with the vertices, 4 with the edges and 1 with the face).
-                    11 : 10-node second order tetrahedron (4 nodes associated with the vertices and 6 with the edges).
-                    12 : 27-node second order hexahedron (8 nodes associated with the vertices, 12 with the edges, 6 with the faces and 1 with the volume).
-                    13 : 18-node second order prism (6 nodes associated with the vertices, 9 with the edges and 3 with the quadrangular faces).
-                    14 : 14-node second order pyramid (5 nodes associated with the vertices, 8 with the edges and 1 with the quadrangular face).
-                    15 : 1-node point.
-                    16 : 8-node second order quadrangle (4 nodes associated with the vertices and 4 with the edges).
-                    17 : 20-node second order hexahedron (8 nodes associated with the vertices and 12 with the edges).
-                    18 : 15-node second order prism (6 nodes associated with the vertices and 9 with the edges).
-                    19 : 13-node second order pyramid (5 nodes associated with the vertices and 8 with the edges).
+        Supported ids in this writer:
+        - ``1``: 2-node line
+        - ``2``: 3-node triangle
+        - ``3``: 4-node quadrangle
+        - ``4``: 4-node tetrahedron
+        - ``5``: 8-node hexahedron
+        - ``8``: 3-node second-order line
+        - ``9``: 6-node second-order triangle
+        - ``11``: 10-node second-order tetrahedron
 
-        fields (optional)  : list of the fields to write, syntax:
-            fields=[[variable_name1,'nodal' or'elemental' ,number of values per node,'name 1'],
-                    [variable_name2,'nodal' or'elemental' ,number of values per node,'name 2'],
-                    ...
-                    ]
-
-    Returns string."""
+        Common Gmsh ids reference:
+        - ``1``: 2-node line
+        - ``2``: 3-node triangle
+        - ``3``: 4-node quadrangle
+        - ``4``: 4-node tetrahedron
+        - ``5``: 8-node hexahedron
+        - ``6``: 6-node prism
+        - ``7``: 5-node pyramid
+        - ``8``: 3-node second-order line
+        - ``9``: 6-node second-order triangle
+        - ``10``: 9-node second-order quadrangle
+        - ``11``: 10-node second-order tetrahedron
+        - ``12``: 27-node second-order hexahedron
+        - ``13``: 18-node second-order prism
+        - ``14``: 14-node second-order pyramid
+        - ``15``: 1-node point
+        - ``16``: 8-node second-order quadrangle
+        - ``17``: 20-node second-order hexahedron
+        - ``18``: 15-node second-order prism
+        - ``19``: 13-node second-order pyramid
+    fields : list, optional
+        Field descriptors as ``[values, 'nodal'|'elemental', ncomp, name]``.
+    """
     
     if not isinstance(filename, str):
         filename = str(filename)
@@ -240,6 +250,15 @@ def WriteResults(filename, nodes, elements, elttype, fields=[]):
 
 
 def ReadGmshNodes(file, nbcoord):
+    """Read node coordinates from a Gmsh ``.msh`` file.
+
+    Parameters
+    ----------
+    file : str or path-like
+        Input mesh file.
+    nbcoord : int
+        Number of coordinates per node (2 or 3).
+    """
     import string
     import numpy
     
@@ -284,6 +303,32 @@ def ReadGmshNodes(file, nbcoord):
 
 
 def ReadGmshElements(file, elmttype, prop):
+    """Read elements of a given type and physical property from Gmsh file.
+
+    Parameters
+    ----------
+    file : str or path-like
+        Input mesh file.
+    elmttype : int
+        Gmsh element type id to extract.
+
+        Currently handled by this reader:
+        - ``1``: 2-node line
+        - ``2``: 3-node triangle
+        - ``3``: 4-node quadrangle
+        - ``4``: 4-node tetrahedron
+        - ``5``: 8-node hexahedron
+        - ``8``: 3-node second-order line
+        - ``9``: 6-node second-order triangle
+        - ``11``: 10-node second-order tetrahedron
+    prop : int
+        Physical tag to filter elements.
+
+    Returns
+    -------
+    tuple
+        ``(elements, unique_node_ids)``.
+    """
     import string
     import numpy
     f = open(file, 'r')

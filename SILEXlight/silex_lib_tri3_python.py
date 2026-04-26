@@ -1,12 +1,31 @@
+"""TRI3 finite-element routines implemented in pure Python."""
 
 import numpy as np
 
 
 def det33_ligne_de_un(a):
+    """Compute the determinant of a 3x3 matrix with first row fixed to ones.
+
+    Parameters
+    ----------
+    a : numpy.ndarray
+        Array of shape (2, 3) containing the last two rows of the matrix.
+    """
     return a[0, 1]*a[1, 2]-a[0, 2]*a[1, 1]-a[0, 0]*a[1, 2]+a[0, 0]*a[1, 1]+a[1, 0]*a[0, 2]-a[1, 0]*a[0, 1]
 
 
 def stiffnessmatrix(nodes, elements, material):
+    """Assemble TRI3 stiffness entries in triplet (Ik, Jk, Vk) format.
+
+    Parameters
+    ----------
+    nodes : numpy.ndarray
+        Nodal coordinates with shape (n_nodes, 2).
+    elements : numpy.ndarray
+        Element connectivity with shape (n_elem, 3), 1-based node ids.
+    material : numpy.ndarray
+        Material array ``[Young, nu, thickness]``.
+    """
     nbnodes = nodes.shape[0]
     nbelem = elements.shape[0]
 
@@ -102,6 +121,13 @@ def stiffnessmatrix(nodes, elements, material):
 
 
 def compute_stress_strain_error(nodes, elements, material, QQ):
+    """Compute TRI3 stress, strain and error estimators from displacements.
+
+    Returns
+    -------
+    tuple
+        ``(Sigma, sig_smooth, Epsilon, EpsilonNodes, ErrElem, ErrGlob)``.
+    """
     nbnodes = nodes.shape[0]
     nbelem = elements.shape[0]
 
@@ -279,6 +305,15 @@ def compute_stress_strain_error(nodes, elements, material, QQ):
 
 
 def forceonline(nodes, elements, fs, pts):
+    """Assemble equivalent nodal loads for distributed loads on 2-node edges.
+
+    Parameters
+    ----------
+    fs : array-like
+        ``[fx_pt1, fy_pt1, fx_pt2, fy_pt2]`` in force-per-length units.
+    pts : array-like
+        ``[x1, y1, x2, y2]`` coordinates used to interpolate load values.
+    """
     # nodes: node coordinates
     # elements: 2-node line elements on which the force is applied
     # fs=[ surf. load on pt1 x-direc  , surf. load on pt1 y-direc , surf. load on pt2 x-direc  , surf. load on pt2 y-direc ]

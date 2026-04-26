@@ -1,0 +1,56 @@
+name: CI-docs-rtd
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'SILEXlight/**'
+      - '.readthedocs.yaml'
+      - 'pyproject.toml'
+      - 'README.md'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'SILEXlight/**'
+      - '.readthedocs.yaml'
+      - 'pyproject.toml'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran
+
+      - name: Install package and docs dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install meson-python ninja numpy
+          pip install --no-build-isolation -e .[test]
+          pip install -r docs/requirements.txt
+
+      - name: Build docs
+        run: |
+          sphinx-build -W -b html docs/source docs/_build/html
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sphinx-html
+          path: docs/_build/html

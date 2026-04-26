@@ -59,6 +59,7 @@ repository = "https://github.com/luclaurent/SILEX-light"
 [project.optional-dependencies]
 dev = ["pylint ~=2.14.0", "toml ~=0.10.2", "yapf ~=0.32.0"]
 test = ["pytest", "pytest-cov[all]", "pytest-benchmark"]
+docs = ["sphinx>=7.4", "sphinx-rtd-theme>=2.0", "sphinx-markdown-builder>=0.6"]
 
 [tool.hatch.build]
 # packages = ["SILEXlib"]
