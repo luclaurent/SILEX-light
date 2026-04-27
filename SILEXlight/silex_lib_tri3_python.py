@@ -356,7 +356,7 @@ def forceonline(nodes, elements, fs, pts):
 
             forceelem = forceelem + \
                 np.dot(Phi.T, forcegausspt)*wg[g]*0.5*lelem
-
+        forceelem = forceelem.flatten() # update for new Numpy versions
         F[dofx[0]] = F[dofx[0]]+forceelem[0]
         F[dofy[0]] = F[dofy[0]]+forceelem[1]
         F[dofx[1]] = F[dofx[1]]+forceelem[2]
