@@ -7,11 +7,13 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'docs/**'
-      - 'SILEXlight/**'
-      - 'README.md'
-      - 'pyproject.toml'
+    tags:
+      - "v*"
+    # paths:
+    #   - 'docs/**'
+    #   - 'SILEXlight/**'
+    #   - 'README.md'
+    #   - 'pyproject.toml'
   workflow_dispatch:
 
 jobs:
@@ -40,6 +42,10 @@ jobs:
         run: |
           sphinx-build -b markdown docs/source docs/_build/wiki
 
+      - name: Prepare markdown for GitHub wiki
+        run: |
+          python scripts/prepare_github_wiki.py docs/_build/wiki docs/_build/wiki-github
+
       - name: Publish to GitHub wiki
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -52,9 +58,7 @@ jobs:
 
           rsync -av --delete \
             --exclude='.git/' \
-            --exclude='.doctrees/' \
-            --exclude='*.doctree' \
-            docs/_build/wiki/ "$TMP_DIR/"
+            docs/_build/wiki-github/ "$TMP_DIR/"
 
           cd "$TMP_DIR/"
           if [ ! -f Home.md ]; then
