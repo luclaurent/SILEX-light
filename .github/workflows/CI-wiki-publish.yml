@@ -44,7 +44,7 @@ jobs:
 
       - name: Prepare markdown for GitHub wiki
         run: |
-          python scripts/prepare_github_wiki.py docs/_build/wiki docs/_build/wiki-github
+          python docs/prepare_github_wiki.py docs/_build/wiki docs/_build/wiki-github
 
       - name: Publish to GitHub wiki
         env:
