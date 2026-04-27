@@ -51,7 +51,8 @@ jobs:
         pip install meson-python ninja numpy
     - name: Install the package
       run: |
-        pip install -v --no-build-isolation -e .[test]
+        # pip install -v --no-build-isolation -e .[test]
+        pip install .[test]
         # Show f2py compiler info for debug
         # f2py -c --help-fcompiler        
     - name: Run tests
