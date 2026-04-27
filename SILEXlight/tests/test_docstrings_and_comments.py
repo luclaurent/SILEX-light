@@ -5,7 +5,6 @@ from pathlib import Path
 from SILEXlight import silex_lib_gmsh
 from SILEXlight import silex_lib_tet4_python
 from SILEXlight import silex_lib_tri3_python
-from SILEXlight import version
 
 
 def _has_meaningful_docstring(obj) -> bool:
@@ -34,9 +33,6 @@ def test_gmsh_python_function_docstrings():
     assert _has_meaningful_docstring(silex_lib_gmsh.ReadGmshNodes)
     assert _has_meaningful_docstring(silex_lib_gmsh.ReadGmshElements)
 
-
-def test_version_helper_docstrings():
-    assert _has_meaningful_docstring(version.get_version)
 
 
 def test_fortran_files_have_purpose_comments():

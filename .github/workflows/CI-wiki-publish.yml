@@ -46,12 +46,17 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          TMP_DIR="$(mktemp -d)"
 
-          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git" wiki
+          git clone "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git" "$TMP_DIR"
 
-          rsync -av --delete --exclude '.git' docs/_build/wiki/ wiki/
+          rsync -av --delete \
+            --exclude='.git/' \
+            --exclude='.doctrees/' \
+            --exclude='*.doctree' \
+            docs/_build/wiki/ "$TMP_DIR/"
 
-          cd wiki
+          cd "$TMP_DIR/"
           if [ ! -f Home.md ]; then
             if [ -f index.md ]; then
               cp index.md Home.md
@@ -67,4 +72,4 @@ jobs:
           fi
 
           git commit -m "docs: sync wiki from sphinx (${GITHUB_SHA})"
-          git push
+          git push origin HEAD
